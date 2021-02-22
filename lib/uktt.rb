@@ -33,7 +33,7 @@ module Uktt
   @config = {
               host: Uktt::Http.api_host, 
               version: Uktt::Http.spec_version, 
-              debug: true,
+              debug: false,
               format: 'ostruct',
               currency: PARENT_CURRENCY
             }
