@@ -3,7 +3,7 @@ require 'json-schema'
 require 'pry'
 require 'uktt'
 
-RSpec.shared_context :http_resources do
+RSpec.shared_context 'with http resources' do
   let(:http) { Uktt::Http.build(host, version, format) }
 
   let(:host) { 'https://dev.trade-tariff.service.gov.uk' }
@@ -18,7 +18,7 @@ RSpec.configure do |config|
   # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!
 
-  config.include_context :http_resources, :http
+  config.include_context 'with http resources', :http
 
   config.expect_with :rspec do |c|
     c.syntax = :expect

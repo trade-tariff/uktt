@@ -1,0 +1,43 @@
+version: 2.1
+
+orbs:
+  ruby: circleci/ruby@1.1.2
+
+jobs:
+  bundle:
+    docker:
+      - image: cimg/ruby:2.7
+    steps:
+      - checkout
+      - ruby/install-deps
+  checking:
+    docker:
+      - image: 'cimg/ruby:2.7'
+    steps:
+      - checkout
+      - ruby/install-deps
+      - ruby/rubocop-check:
+          format: progress
+          label: Inspecting with Rubocop
+  test:
+    docker:
+      - image: cimg/ruby:2.7
+        environment:
+          BUNDLE_JOBS: "3"
+          BUNDLE_RETRY: "3"
+          RAILS_ENV: test
+          COVERAGE: 1
+    steps:
+      - checkout
+      - ruby/install-deps
+      - ruby/rspec-test
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - bundle
+      - checking
+      - test:
+          requires:
+            - bundle
