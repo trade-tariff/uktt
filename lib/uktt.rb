@@ -1,4 +1,5 @@
 require 'uktt/version'
+require 'uktt/base'
 require 'uktt/chapter'
 require 'uktt/commodity'
 require 'uktt/country'

@@ -445,7 +445,7 @@ RSpec.describe 'UK Trade Tariff API client' do
     end
   end
 
-  it 'performs a retreive of countries' do
+  it 'performs a retrieve of countries' do
     Uktt.configure(format: 'jsonapi', version: 'v2')
 
     expect_any_instance_of(Uktt::Http).to receive(:retrieve).with('geographical_areas/countries', 'jsonapi')
@@ -453,10 +453,13 @@ RSpec.describe 'UK Trade Tariff API client' do
     Uktt::Country.new.retrieve
   end
 
-  it 'performs a retreive of geographical_areas' do
+  let(:http_client) { instance_double('Uktt::Http') }
+
+  it 'performs a retrieve of geographical_areas' do
     Uktt.configure(format: 'jsonapi', version: 'v2')
 
-    expect_any_instance_of(Uktt::Http).to receive(:retrieve).with('geographical_areas', 'jsonapi')
+    allow(Uktt::Http).to receive(:new).and_return(http_client)
+    allow(http_client).to receive(:retrieve).with('geographical_areas', 'jsonapi')
 
     Uktt::GeographicalArea.new.retrieve
   end
