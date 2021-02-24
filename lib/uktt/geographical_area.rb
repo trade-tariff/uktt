@@ -1,5 +1,5 @@
 module Uktt
-  class Country
+  class GeographicalArea
     attr_accessor :config, :response
 
     def initialize(opts = {})
@@ -9,7 +9,7 @@ module Uktt
     end
 
     def retrieve
-      fetch "#{GEOGRAPHICAL_AREAS}/countries"
+      fetch "#{GEOGRAPHICAL_AREAS}"
     end
 
     def config=(new_opts = {})

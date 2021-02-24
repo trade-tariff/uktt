@@ -444,4 +444,20 @@ RSpec.describe 'UK Trade Tariff API client' do
       expect(response[:data].first[:attributes][:quota_order_number_id]).to eq(quota_search_params[:order_number])
     end
   end
+
+  it 'performs a retreive of countries' do
+    Uktt.configure(format: 'jsonapi', version: 'v2')
+
+    expect_any_instance_of(Uktt::Http).to receive(:retrieve).with('geographical_areas/countries', 'jsonapi')
+
+    Uktt::Country.new.retrieve
+  end
+
+  it 'performs a retreive of geographical_areas' do
+    Uktt.configure(format: 'jsonapi', version: 'v2')
+
+    expect_any_instance_of(Uktt::Http).to receive(:retrieve).with('geographical_areas', 'jsonapi')
+
+    Uktt::GeographicalArea.new.retrieve
+  end
 end
