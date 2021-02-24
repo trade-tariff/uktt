@@ -6,7 +6,7 @@ RSpec.describe 'UK Trade Tariff API client' do
           debug: false,
           format: 'ostruct'}
 
-  section_id = '1'
+  section_id = ''
   section = Uktt::Section.new(opts.merge(section_id: section_id))
 
   chapter_id = '01'
@@ -443,5 +443,25 @@ RSpec.describe 'UK Trade Tariff API client' do
 
       expect(response[:data].first[:attributes][:quota_order_number_id]).to eq(quota_search_params[:order_number])
     end
+  end
+
+  let(:http_client) { instance_double('Uktt::Http') }
+
+  it 'performs a retrieve of countries' do
+    Uktt.configure(format: 'jsonapi', version: 'v2')
+
+    allow(Uktt::Http).to receive(:new).and_return(http_client)
+    allow(http_client).to receive(:retrieve).with('geographical_areas/countries', 'jsonapi')
+
+    Uktt::Country.new.retrieve
+  end
+
+  it 'performs a retrieve of geographical_areas' do
+    Uktt.configure(format: 'jsonapi', version: 'v2')
+
+    allow(Uktt::Http).to receive(:new).and_return(http_client)
+    allow(http_client).to receive(:retrieve).with('geographical_areas', 'jsonapi')
+
+    Uktt::GeographicalArea.new.retrieve
   end
 end
