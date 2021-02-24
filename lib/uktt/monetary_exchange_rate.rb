@@ -32,7 +32,7 @@ module Uktt
 
     def config=(new_opts = {})
       merged_opts = Uktt.config.merge(new_opts)
-      Uktt.configure merged_opts
+      Uktt.configure(merged_opts)
       @monetary_exchange_rate_id = merged_opts[:monetary_exchange_rate_id] || @monetary_exchange_rate_id
       @config = Uktt.config
     end

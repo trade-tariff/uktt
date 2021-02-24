@@ -22,7 +22,7 @@ module Uktt
 
     def config=(new_opts = {})
       merged_opts = Uktt.config.merge(new_opts)
-      Uktt.configure merged_opts
+      Uktt.configure(merged_opts)
       @chapter_id = merged_opts[:chapter_id] || @chapter_id
       @filepath = merged_opts[:filepath] || @filepath
       @currency = merged_opts[:currency] || @currency
