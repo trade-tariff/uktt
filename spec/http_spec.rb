@@ -49,5 +49,20 @@ RSpec.describe Uktt::Http do
         expect(conn).to have_received(:get).with(expected_url, expected_body, expected_headers)
       end
     end
+
+    context 'when a query param is specified in the config' do
+      before do
+        Uktt.configure(format: 'jsonapi', version: 'v2', query: { 'filter[geographical_area_id]' => 'RO' })
+      end
+
+      let(:host) { 'http://localhost' }
+      let(:expected_url)  { 'http://localhost/api/v2/commodities/1234567890?filter[geographical_area_id]=RO' }
+
+      it 'uses the correct full url with the query constructed' do
+        client.retrieve('commodities/1234567890')
+
+        expect(conn).to have_received(:get).with(expected_url, expected_body, expected_headers)
+      end
+    end
   end
 end
