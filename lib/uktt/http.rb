@@ -17,10 +17,23 @@ module Uktt
 
     def retrieve(resource, format = 'ostruct')
       full_url = File.join(@host, 'api', @version, resource)
+      full_url = "#{full_url}#{query}"
       headers  = { 'Content-Type' => 'application/json' }
       response = @conn.get(full_url, {}, headers)
 
       Parser.new(response.body, format).parse
+    end
+
+    private
+
+    def query
+      return "" if Uktt.config[:query].empty?
+
+      query = Uktt.config[:query].map do |key, value|
+        "#{key}=#{value}"
+      end
+
+      "?#{query.join(',')}"
     end
 
     class << self

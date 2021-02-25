@@ -1,6 +1,7 @@
 require 'bundler/setup'
-require 'uktt'
 require 'json-schema'
+require 'pry'
+require 'uktt'
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

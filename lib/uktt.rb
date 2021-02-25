@@ -37,7 +37,8 @@ module Uktt
               version: Uktt::Http.spec_version, 
               debug: false,
               format: 'ostruct',
-              currency: PARENT_CURRENCY
+              currency: PARENT_CURRENCY,
+              query: {},
             }
 
   @valid_config_keys = @config.keys
