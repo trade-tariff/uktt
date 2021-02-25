@@ -27,7 +27,7 @@ module Uktt
     private
 
     def query
-      return "" if Uktt.config[:query].empty?
+      return '' if Uktt.config[:query].empty?
 
       query = Uktt.config[:query].map do |key, value|
         "#{key}=#{value}"
