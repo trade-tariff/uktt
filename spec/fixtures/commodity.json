@@ -16,6 +16,12 @@
       "meursing_code": false,
       "declarable": true
     },
+    "meta": {
+      "duty_calculator": {
+        "zero_mfn_duty": false,
+        "trade_defence": true
+      }
+    },
     "relationships": {
       "footnotes": {
         "data": [
