@@ -29,8 +29,8 @@ module Uktt
         result = {}
 
         parse_top_level_attributes!(resource, result)
-
         parse_relationships!(resource['relationships'], result) if resource.key?('relationships')
+        parse_meta!(resource, result)
 
         result
       end
@@ -59,6 +59,10 @@ module Uktt
                            values['data']
                          end
         end
+      end
+
+      def parse_meta!(resource, parent)
+        parent['meta'] = resource['meta']
       end
 
       def parse_record(record)
