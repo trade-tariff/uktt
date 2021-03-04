@@ -6,7 +6,23 @@
   "properties": {
     "meta": {
       "type": "object",
-      "required": true
+      "required": true,
+      "properties": {
+        "duty_calculator": {
+          "type": "object",
+          "required": true,
+          "properties": {
+            "zero_mfn_duty": {
+              "type": "boolean",
+              "required": true
+            },
+            "trade_defence": {
+              "type": "boolean",
+              "required": true
+            }
+          }
+        }
+      }
     },
     "producline_suffix": {
       "type": "string",
