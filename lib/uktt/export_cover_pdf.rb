@@ -16,7 +16,7 @@ class ExportCoverPdf
     @document = Prawn::Document.new(
       page_size: 'A4',
       margin: @margin,
-      page_layout: :landscape
+      page_layout: :landscape,
     )
 
     set_fonts
@@ -34,17 +34,17 @@ class ExportCoverPdf
 
   def set_fonts
     font_families.update('OpenSans' => {
-                           normal: 'vendor/assets/Open_Sans/OpenSans-Regular.ttf',
-                           italic: 'vendor/assets/Open_Sans/OpenSans-RegularItalic.ttf',
-                           medium: 'vendor/assets/Open_Sans/OpenSans-SemiBold.ttf',
-                           medium_italic: 'vendor/assets/Open_Sans/OpenSans-SemiBoldItalic.ttf',
-                           bold: 'vendor/assets/Open_Sans/OpenSans-Bold.ttf',
-                           bold_italic: 'vendor/assets/Open_Sans/OpenSans-BoldItalic.ttf'
-                         })
+      normal: 'vendor/assets/Open_Sans/OpenSans-Regular.ttf',
+      italic: 'vendor/assets/Open_Sans/OpenSans-RegularItalic.ttf',
+      medium: 'vendor/assets/Open_Sans/OpenSans-SemiBold.ttf',
+      medium_italic: 'vendor/assets/Open_Sans/OpenSans-SemiBoldItalic.ttf',
+      bold: 'vendor/assets/Open_Sans/OpenSans-Bold.ttf',
+      bold_italic: 'vendor/assets/Open_Sans/OpenSans-BoldItalic.ttf',
+    })
     font_families.update('Monospace' => {
-                           normal: 'vendor/assets/Overpass_Mono/OverpassMono-Regular.ttf',
-                           bold: 'vendor/assets/Overpass_Mono/OverpassMono-Bold.ttf'
-                         })
+      normal: 'vendor/assets/Overpass_Mono/OverpassMono-Regular.ttf',
+      bold: 'vendor/assets/Overpass_Mono/OverpassMono-Bold.ttf',
+    })
     font 'OpenSans'
     font_size @base_table_font_size
   end
@@ -53,7 +53,7 @@ class ExportCoverPdf
     {
       content: text_in,
       kerning: true,
-      inline_format: true
+      inline_format: true,
     }
   end
 
@@ -75,7 +75,7 @@ class ExportCoverPdf
     footer_data_array = [[
       format_text("<font size=9>#{Date.today.strftime('%-d %B %Y')}</font>"),
       format_text("<b>#{'i' * (page_number - 1)}</b>"),
-      format_text("<font size=9><b>Customs Tariff</b> Vol 2</font>")
+      format_text('<font size=9><b>Customs Tariff</b> Vol 2</font>'),
     ]]
     footer_data_array
   end
@@ -92,9 +92,9 @@ class ExportCoverPdf
     opts = {
       kerning: true,
       inline_format: true,
-      size: @base_table_font_size
+      size: @base_table_font_size,
     }
-    image "vendor/assets/HMRC-logo.png", width: 180
+    image 'vendor/assets/HMRC-logo.png', width: 180
     text_box "<font size='20'><b>Volume 2</b></font>\n<font size='17'>Schedule of duty and trade\nstatistical descriptions,\ncodes and rates</font>", at: [(@printable_width / 3), @printable_height - 100], inline_format: true
     text_box "<font size='32'>Integrated\nTariff of the\nUnited Kingdom</font>\n\n\n<font size='12'>Short title: <i>TARIFF</i>\n\n\nwww.gov.uk/trade-tariff\n\n\n<b>#{Date.today.strftime('%-d %B %Y')}</b>\n\n\n\n\n\n\n\n</font>", at: [(@printable_width / 3) * 2 + (@base_table_font_size * 3), @printable_height - 100], inline_format: true
     stroke_rectangle [0, @printable_height - 200], ((@printable_width / 3) * 2), 190
@@ -104,10 +104,10 @@ class ExportCoverPdf
 
   def notice_content
     <<~NOTICE
-    Users should be aware that in any case where information in the UK Tariff or Customs Handling of Import and Export Freight (CHIEF) system is at variance with that contianed in the appropirate Community legislation published in the Official Journal of the European Communities, the latter will represent the correct legal position.
-    Whilst every effort is made to ensre the accuracy of the UK Tariff, the onus remains with the User to consult the Official Journal as necessary and to ensure that the correct duties are paid at importation. In instances where the Customs Authorities are at error, the User may still be liable for any additional duty that may be demanded as a result of that error being discovered.
-    The Official Journal is accessible on the Commission's Europa website:
-    https://eur-lex.europa.eu/oj/direct-access.html
+      Users should be aware that in any case where information in the UK Tariff or Customs Handling of Import and Export Freight (CHIEF) system is at variance with that contianed in the appropirate Community legislation published in the Official Journal of the European Communities, the latter will represent the correct legal position.
+      Whilst every effort is made to ensre the accuracy of the UK Tariff, the onus remains with the User to consult the Official Journal as necessary and to ensure that the correct duties are paid at importation. In instances where the Customs Authorities are at error, the User may still be liable for any additional duty that may be demanded as a result of that error being discovered.
+      The Official Journal is accessible on the Commission's Europa website:
+      https://eur-lex.europa.eu/oj/direct-access.html
     NOTICE
   end
 
@@ -115,7 +115,7 @@ class ExportCoverPdf
     opts = {
       kerning: true,
       inline_format: true,
-      size: @base_table_font_size
+      size: @base_table_font_size,
     }
     column_box([0, cursor], columns: 3, width: bounds.width, height: (@printable_height - @footer_height - (@printable_height - cursor) + 20), spacer: (@base_table_font_size * 3)) do
       text(layout_content, opts)

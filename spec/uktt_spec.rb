@@ -3,19 +3,19 @@ require 'uktt'
 RSpec.describe 'UK Trade Tariff gem' do
   host = Uktt::API_HOST_PROD
 
-  test_opts = {format: 'ostruct', 
-               host: api_host, 
-               version: spec_version,
-               debug: false,
-               currency: Uktt::PARENT_CURRENCY,
-               query: {}}
+  test_opts = { format: 'ostruct',
+                host: api_host,
+                version: spec_version,
+                debug: false,
+                currency: Uktt::PARENT_CURRENCY,
+                query: {} }
 
-  new_opts = {host: host,
-              version: 'v2',
-              format: 'json',
-              debug: true,
-              currency: Uktt::PARENT_CURRENCY,
-              query: {}}
+  new_opts = { host: host,
+               version: 'v2',
+               format: 'json',
+               debug: true,
+               currency: Uktt::PARENT_CURRENCY,
+               query: {} }
 
   section_id = '1'
   section_test = Uktt::Section.new(test_opts.merge(section_id: section_id))
@@ -42,7 +42,7 @@ RSpec.describe 'UK Trade Tariff gem' do
   end
 
   it 'produces a PDF and saves it at a user-specified filepath' do
-    user_filepath = Uktt::Pdf.new(chapter_id: 'test', filepath:'/tmp/test.pdf').make_chapter
+    user_filepath = Uktt::Pdf.new(chapter_id: 'test', filepath: '/tmp/test.pdf').make_chapter
     expect(user_filepath).to eq('/tmp/test.pdf')
     expect(File.read(user_filepath)[0, 4]).to eq('%PDF')
     File.delete(user_filepath) if File.exist?(user_filepath)

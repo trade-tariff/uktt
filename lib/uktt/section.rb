@@ -1,9 +1,8 @@
 module Uktt
-  # A Section object for dealing with an API resource
-  class Section
+  class Section < Base
     RESOURCE_PATH = 'sections'.freeze
 
-    attr_accessor :config, :section_id
+    attr_accessor :section_id
 
     def initialize(opts = {})
       @section_id = opts[:section_id] || nil
@@ -31,23 +30,6 @@ module Uktt
       return '@section_id cannot be nil' if @section_id.nil?
 
       fetch "#{RESOURCE_PATH}/#{@section_id}/section_note.json"
-    end
-
-    def config=(new_opts = {})
-      merged_opts = Uktt.config.merge(new_opts)
-      Uktt.configure(merged_opts)
-      @section_id = merged_opts[:section_id] || @section_id
-      @config = Uktt.config
-    end
-
-    private
-
-    def fetch(resource)
-      Uktt::Http.new(@config[:host], 
-                     @config[:version], 
-                     @config[:debug])
-      .retrieve(resource, 
-                     @config[:format])
     end
   end
 end

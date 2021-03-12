@@ -1,11 +1,8 @@
 require 'uktt'
 
 RSpec.describe 'UK Trade Tariff API client' do
-  opts = {host: api_host, 
-          version: spec_version, 
-          debug: false,
-          format: 'ostruct'}
-
+  opts = { host: api_host,
+           version: spec_version, debug: false, format: 'ostruct' }
   section_id = ''
   section = Uktt::Section.new(opts.merge(section_id: section_id))
 
@@ -26,8 +23,10 @@ RSpec.describe 'UK Trade Tariff API client' do
     year: '2018',
     geographical_area_id: 'EG',
     order_number: '091784',
-    status: 'not_blocked'
+    status: 'not_blocked',
   }
+
+  let(:http_client) { instance_double('Uktt::Http') }
 
   it 'retrieves one section as OpenStruct' do
     Uktt.configure(format: 'ostruct', version: spec_version)
@@ -138,7 +137,7 @@ RSpec.describe 'UK Trade Tariff API client' do
       expect(response[:data][:attributes][:goods_nomenclature_item_id]).to eq("#{chapter_id}00000000")
     end
   end
-  
+
   it 'retrieves one chapter\'s note as OpenStruct' do
     Uktt.configure(format: 'ostruct', version: spec_version)
     response = chapter.note
@@ -444,8 +443,6 @@ RSpec.describe 'UK Trade Tariff API client' do
       expect(response[:data].first[:attributes][:quota_order_number_id]).to eq(quota_search_params[:order_number])
     end
   end
-
-  let(:http_client) { instance_double('Uktt::Http') }
 
   it 'performs a retrieve of countries' do
     Uktt.configure(format: 'jsonapi', version: 'v2')
