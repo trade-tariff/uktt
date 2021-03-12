@@ -1,7 +1,7 @@
 module Uktt
   # A Chapter object for dealing with an API resource
   class Chapter
-    CHAPTER = 'chapters'.freeze
+    RESOURCE_PATH = 'chapters'.freeze
 
     attr_accessor :config, :chapter_id
 
@@ -14,11 +14,11 @@ module Uktt
     def retrieve
       return '@chapter_id cannot be nil' if @chapter_id.nil?
 
-      fetch "#{CHAPTER}/#{@chapter_id}.json"
+      fetch "#{RESOURCE_PATH}/#{@chapter_id}.json"
     end
 
     def retrieve_all
-      fetch "#{CHAPTER}.json"
+      fetch "#{RESOURCE_PATH}.json"
     end
 
     def goods_nomenclatures
@@ -30,13 +30,13 @@ module Uktt
     def changes
       return '@chapter_id cannot be nil' if @chapter_id.nil?
 
-      fetch "#{CHAPTER}/#{@chapter_id}/changes.json"
+      fetch "#{RESOURCE_PATH}/#{@chapter_id}/changes.json"
     end
 
     def note
       return '@chapter_id cannot be nil' if @chapter_id.nil?
 
-      fetch "#{CHAPTER}/#{@chapter_id}/chapter_note.json"
+      fetch "#{RESOURCE_PATH}/#{@chapter_id}/chapter_note.json"
     end
 
     def config=(new_opts = {})

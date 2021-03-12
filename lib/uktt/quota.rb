@@ -1,7 +1,7 @@
 module Uktt
   # A Quota object for dealing with an API resource
   class Quota
-    QUOTA = 'quotas'.freeze
+    RESOURCE_PATH = 'quotas'.freeze
 
     attr_accessor :config
 
@@ -11,7 +11,7 @@ module Uktt
     end
 
     def search(params)
-      fetch "#{QUOTA}/search.json?#{URI.encode_www_form(params)}"
+      fetch "#{RESOURCE_PATH}/search.json?#{URI.encode_www_form(params)}"
     end
 
     def config=(new_opts = {})

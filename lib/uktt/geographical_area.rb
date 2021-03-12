@@ -1,9 +1,9 @@
 module Uktt
   class GeographicalArea < Base
-    GEOGRAPHICAL_AREAS = 'geographical_areas'.freeze
+    RESOURCE_PATH = 'geographical_areas'.freeze
 
     def retrieve
-      fetch "#{GEOGRAPHICAL_AREAS}"
+      fetch RESOURCE_PATH
     end
   end
 end
