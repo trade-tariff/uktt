@@ -94,11 +94,9 @@ class ExportChapterPdf
 
   def set_currency
     cur = (SUPPORTED_CURRENCIES.keys & [@opts[:currency]]).first
-    if cur
-      cur.upcase
-    else
-      raise StandardError, "`#{@opts[:currency]}` is not a supported currency. SUPPORTED_CURRENCIES = [#{SUPPORTED_CURRENCIES.keys.join(', ')}]"
-    end
+    return cur.upcase if cur
+
+    raise StandardError, "`#{@opts[:currency]}` is not a supported currency. SUPPORTED_CURRENCIES = [#{SUPPORTED_CURRENCIES.keys.join(', ')}]"
   end
 
   def set_fonts

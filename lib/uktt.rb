@@ -46,9 +46,11 @@ module Uktt
     begin
       config = YAML.load(IO.read(path_to_yaml_file))
     rescue Errno::ENOENT
-      log(:warning, "YAML configuration file couldn't be found. Using defaults."); return
+      log(:warning, "YAML configuration file couldn't be found. Using defaults.")
+      return
     rescue Psych::SyntaxError
-      log(:warning, 'YAML configuration file contains invalid syntax. Using defaults.'); return
+      log(:warning, 'YAML configuration file contains invalid syntax. Using defaults.')
+      return
     end
 
     configure(config)

@@ -153,15 +153,11 @@ module Uktt
       end
 
       def action
-        if options[:goods]
-          :goods_nomenclatures
-        elsif options[:note]
-          :note
-        elsif options[:changes]
-          :changes
-        else
-          :retrieve
-        end
+        return :goods_nomenclatures if options[:goods]
+        return :note if options[:note]
+        return :changes if options[:changes]
+
+        :retrieve
       end
 
       def host
