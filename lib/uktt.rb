@@ -3,6 +3,7 @@ require 'uktt/base'
 require 'uktt/chapter'
 require 'uktt/commodity'
 require 'uktt/country'
+require 'uktt/exchange_rate'
 require 'uktt/geographical_area'
 require 'uktt/heading'
 require 'uktt/http'
@@ -19,15 +20,7 @@ module Uktt
   API_HOST_PROD      = 'https://www.trade-tariff.service.gov.uk'.freeze
   API_HOST_LOCAL     = 'https://dev.trade-tariff.service.gov.uk'.freeze
   API_VERSION        = 'v1'.freeze
-  CHAPTER            = 'chapters'.freeze
-  COMMODITY          = 'commodities'.freeze
-  GEOGRAPHICAL_AREAS = 'geographical_areas'.freeze
-  GOODS_NOMENCLATURE = 'goods_nomenclatures'.freeze
-  HEADING            = 'headings'.freeze
-  M_X_RATE           = 'monetary_exchange_rates'.freeze
   PARENT_CURRENCY    = 'EUR'.freeze
-  QUOTA              = 'quotas'.freeze
-  SECTION            = 'sections'.freeze
 
   class Error < StandardError; end
 

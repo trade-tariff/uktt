@@ -1,6 +1,8 @@
 module Uktt
   # A Section object for dealing with an API resource
   class Section
+    RESOURCE_PATH = 'sections'.freeze
+
     attr_accessor :config, :section_id
 
     def initialize(opts = {})
@@ -12,23 +14,23 @@ module Uktt
     def retrieve
       return '@section_id cannot be nil' if @section_id.nil?
 
-      fetch "#{SECTION}/#{@section_id}.json"
+      fetch "#{RESOURCE_PATH}/#{@section_id}.json"
     end
 
     def retrieve_all
-      fetch "#{SECTION}.json"
+      fetch "#{RESOURCE_PATH}.json"
     end
 
     def goods_nomenclatures
       return '@section_id cannot be nil' if @section_id.nil?
 
-      fetch "#{GOODS_NOMENCLATURE}/section/#{@section_id}.json"
+      fetch "goods_nomenclatures/section/#{@section_id}.json"
     end
 
     def note
       return '@section_id cannot be nil' if @section_id.nil?
 
-      fetch "#{SECTION}/#{@section_id}/section_note.json"
+      fetch "#{RESOURCE_PATH}/#{@section_id}/section_note.json"
     end
 
     def config=(new_opts = {})

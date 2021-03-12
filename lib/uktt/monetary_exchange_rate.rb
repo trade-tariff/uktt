@@ -1,6 +1,8 @@
 module Uktt
   # A MonetaryExchangeRate object for dealing with an API resource
   class MonetaryExchangeRate
+    RESOURCE_PATH = 'monetary_exchange_rates'.freeze
+
     attr_accessor :monetary_exchange_rate_id, :config, :response
 
     def initialize(opts = {})
@@ -10,7 +12,7 @@ module Uktt
     end
 
     def retrieve_all
-      fetch "#{M_X_RATE}.json"
+      fetch "#{RESOURCE_PATH}.json"
     end
 
     def latest(currency)

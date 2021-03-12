@@ -1,11 +1,13 @@
 module Uktt
   # A Commodity object for dealing with an API resource
   class Commodity
+    RESOURCE_PATH = 'commodities'.freeze
+
     attr_accessor :config, :commodity_id, :response
 
     def initialize(opts = {})
       @commodity_id = opts[:commodity_id] || nil
-      Uktt.configure(opts)
+      Uktt.config.merge (opts)
       @config = Uktt.config
       @response = nil
     end
@@ -13,13 +15,13 @@ module Uktt
     def retrieve
       return '@commodity_id cannot be nil' if @commodity_id.nil?
 
-      fetch "#{COMMODITY}/#{@commodity_id}.json"
+      fetch "#{RESOURCE_PATH}/#{@commodity_id}.json"
     end
 
     def changes
       return '@commodity_id cannot be nil' if @commodity_id.nil?
 
-      fetch "#{COMMODITY}/#{@commodity_id}/changes.json"
+      fetch "#{RESOURCE_PATH}/#{@commodity_id}/changes.json"
     end
 
     def config=(new_opts = {})

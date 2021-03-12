@@ -1,7 +1,9 @@
 module Uktt
   class Country < Base
+    RESOURCE_PATH = 'geographical_areas'.freeze
+
     def retrieve
-      fetch "#{GEOGRAPHICAL_AREAS}/countries"
+      fetch "#{RESOURCE_PATH}/countries"
     end
   end
 end

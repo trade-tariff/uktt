@@ -464,4 +464,13 @@ RSpec.describe 'UK Trade Tariff API client' do
 
     Uktt::GeographicalArea.new.retrieve
   end
+
+  it 'performs a retrieve of exchange_rates' do
+    Uktt.configure(format: 'jsonapi', version: 'v2')
+
+    allow(Uktt::Http).to receive(:new).and_return(http_client)
+    allow(http_client).to receive(:retrieve).with('exchange_rates', 'jsonapi')
+
+    Uktt::ExchangeRate.new.retrieve
+  end
 end

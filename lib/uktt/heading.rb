@@ -1,6 +1,8 @@
 module Uktt
   # A Chapter object for dealing with an API resource
   class Heading
+    RESOURCE_PATH = 'headings'.freeze
+
     attr_accessor :config, :heading_id, :response
 
     def initialize(opts = {})
@@ -13,13 +15,13 @@ module Uktt
     def retrieve
       return '@chapter_id cannot be nil' if @heading_id.nil?
 
-      fetch "#{HEADING}/#{@heading_id}.json"
+      fetch "#{RESOURCE_PATH}/#{@heading_id}.json"
     end
 
     def goods_nomenclatures
       return '@chapter_id cannot be nil' if @heading_id.nil?
 
-      fetch "#{GOODS_NOMENCLATURE}/heading/#{@heading_id}.json"
+      fetch "goods_nomenclatures/heading/#{@heading_id}.json"
     end
 
     def note
@@ -29,7 +31,7 @@ module Uktt
     def changes
       return '@chapter_id cannot be nil' if @heading_id.nil?
 
-      fetch "#{HEADING}/#{@heading_id}/changes.json"
+      fetch "#{RESOURCE_PATH}/#{@heading_id}/changes.json"
     end
 
     def config=(new_opts = {})
