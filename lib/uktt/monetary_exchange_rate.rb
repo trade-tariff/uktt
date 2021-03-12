@@ -1,15 +1,6 @@
 module Uktt
-  # A MonetaryExchangeRate object for dealing with an API resource
-  class MonetaryExchangeRate
+  class MonetaryExchangeRate < Base
     RESOURCE_PATH = 'monetary_exchange_rates'.freeze
-
-    attr_accessor :monetary_exchange_rate_id, :config, :response
-
-    def initialize(opts = {})
-      @monetary_exchange_rate_id = opts[:monetary_exchange_rate_id] || nil
-      Uktt.configure(opts)
-      @config = Uktt.config
-    end
 
     def retrieve_all
       fetch "#{RESOURCE_PATH}.json"
@@ -20,36 +11,16 @@ module Uktt
 
       case @config[:version]
       when 'v1'
-        @response.select{ |obj| obj.child_monetary_unit_code == currency.upcase }
-                 .sort_by(&:validity_start_date)
-                 .last.exchange_rate.to_f
+        @response.select { |obj| obj.child_monetary_unit_code == currency.upcase }
+                 .max_by(&:validity_start_date)
+                 .exchange_rate.to_f
       when 'v2'
-        @response.data.select{ |obj| obj.attributes.child_monetary_unit_code == currency.upcase }
-                 .sort_by{ |obj| obj.attributes.validity_start_date }
-                 .last.attributes.exchange_rate.to_f
+        @response.data.select { |obj| obj.attributes.child_monetary_unit_code == currency.upcase }
+                 .max_by { |obj| obj.attributes.validity_start_date }
+                 .attributes.exchange_rate.to_f
       else
-        raise StandardError.new "`#{@opts[:version]}` is not a supported API version. Supported API versions are: v1 and v2"
+        raise StandardError, "`#{@opts[:version]}` is not a supported API version. Supported API versions are: v1 and v2"
       end
-    end
-
-    def config=(new_opts = {})
-      merged_opts = Uktt.config.merge(new_opts)
-      Uktt.configure(merged_opts)
-      @monetary_exchange_rate_id = merged_opts[:monetary_exchange_rate_id] || @monetary_exchange_rate_id
-      @config = Uktt.config
-    end
-
-    private
-
-    def fetch(resource)
-      @response = Uktt::Http.new(
-        @config[:host],
-        @config[:version],
-        @config[:debug]
-      ).retrieve(
-        resource,
-        @config[:format]
-      )
     end
   end
 end

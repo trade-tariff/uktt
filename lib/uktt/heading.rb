@@ -1,9 +1,9 @@
 module Uktt
   # A Chapter object for dealing with an API resource
-  class Heading
+  class Heading < Base
     RESOURCE_PATH = 'headings'.freeze
 
-    attr_accessor :config, :heading_id, :response
+    attr_accessor :heading_id, :response
 
     def initialize(opts = {})
       @heading_id = opts[:heading_id] || nil
@@ -32,33 +32,6 @@ module Uktt
       return '@chapter_id cannot be nil' if @heading_id.nil?
 
       fetch "#{RESOURCE_PATH}/#{@heading_id}/changes.json"
-    end
-
-    def config=(new_opts = {})
-      merged_opts = Uktt.config.merge(new_opts)
-      Uktt.configure(merged_opts)
-      @heading_id = merged_opts[:heading_id] || @heading_id
-      @config = Uktt.config
-    end
-
-    def find(id)
-      return '@response is nil, run #retrieve first' unless @response
-  
-      response = @response.included.select do |obj|
-        obj.id === id || obj.type === id
-      end
-      response.length == 1 ? response.first : response
-    end
-
-    private
-
-    def fetch(resource)
-      @response = Uktt::Http.new(
-        @config[:host], 
-        @config[:version], 
-        @config[:debug])
-      .retrieve(resource, 
-        @config[:format])
     end
   end
 end

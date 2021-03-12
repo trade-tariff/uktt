@@ -1,9 +1,9 @@
 module Uktt
   # A Chapter object for dealing with an API resource
-  class Chapter
+  class Chapter < Base
     RESOURCE_PATH = 'chapters'.freeze
 
-    attr_accessor :config, :chapter_id
+    attr_accessor :chapter_id
 
     def initialize(opts = {})
       @chapter_id = opts[:chapter_id] || nil
@@ -37,23 +37,6 @@ module Uktt
       return '@chapter_id cannot be nil' if @chapter_id.nil?
 
       fetch "#{RESOURCE_PATH}/#{@chapter_id}/chapter_note.json"
-    end
-
-    def config=(new_opts = {})
-      merged_opts = Uktt.config.merge(new_opts)
-      Uktt.configure(merged_opts)
-      @chapter_id = merged_opts[:chapter_id] || @chapter_id
-      @config = Uktt.config
-    end
-
-    private
-
-    def fetch(resource)
-      Uktt::Http.new(@config[:host], 
-                     @config[:version], 
-                     @config[:debug])
-      .retrieve(resource, 
-                @config[:format])
     end
   end
 end

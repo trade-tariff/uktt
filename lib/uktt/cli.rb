@@ -30,17 +30,17 @@ module Uktt
                  desc: "Use production API host, otherwise `#{API_HOST_LOCAL}`",
                  banner: true
     class_option :goods, aliases: ['-g', '--goods'],
-                 type: :string,
-                 desc: 'Retrieve goods nomenclatures in this object',
-                 banner: false
+                         type: :string,
+                         desc: 'Retrieve goods nomenclatures in this object',
+                         banner: false
     class_option :note, aliases: ['-n', '--note'],
-                 type: :string,
-                 desc: 'Retrieve a note for this object',
-                 banner: false
+                        type: :string,
+                        desc: 'Retrieve a note for this object',
+                        banner: false
     class_option :changes, aliases: ['-c', '--changes'],
-                 type: :string,
-                 desc: 'Retrieve changes for this object',
-                 banner: false
+                           type: :string,
+                           desc: 'Retrieve changes for this object',
+                           banner: false
 
     desc 'section', 'Retrieves a section'
     def section(section_id)
@@ -67,7 +67,7 @@ module Uktt
         puts 'V2 is required. Use `-a v2`'
         return
       end
-      
+
       uktt = Uktt::Chapter.new(options.merge(host: host, chapter_id: chapter_id))
       puts uktt.send(action)
     end
@@ -86,7 +86,7 @@ module Uktt
         puts 'Option not supported for this object'
         return
       end
-      
+
       uktt = Uktt::Heading.new(options.merge(host: host, heading_id: heading_id))
       puts uktt.send(action)
     end
@@ -97,7 +97,7 @@ module Uktt
         puts 'Option not supported for this object'
         return
       end
-      
+
       puts Uktt::Commodity.new(options.merge(host: host, commodity_id: commodity_id)).send(action)
     end
 
@@ -154,13 +154,13 @@ module Uktt
 
       def action
         if options[:goods]
-          return :goods_nomenclatures
+          :goods_nomenclatures
         elsif options[:note]
-          return :note
+          :note
         elsif options[:changes]
-          return :changes
+          :changes
         else
-          return :retrieve
+          :retrieve
         end
       end
 
