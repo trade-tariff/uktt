@@ -1,11 +1,13 @@
 module Uktt
   # A Commodity object for dealing with an API resource
   class Commodity
+    COMMODITY = 'commodities'.freeze
+
     attr_accessor :config, :commodity_id, :response
 
     def initialize(opts = {})
       @commodity_id = opts[:commodity_id] || nil
-      Uktt.configure(opts)
+      Uktt.config.merge (opts)
       @config = Uktt.config
       @response = nil
     end

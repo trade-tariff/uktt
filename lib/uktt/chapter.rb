@@ -1,6 +1,8 @@
 module Uktt
   # A Chapter object for dealing with an API resource
   class Chapter
+    CHAPTER = 'chapters'.freeze
+
     attr_accessor :config, :chapter_id
 
     def initialize(opts = {})
@@ -22,7 +24,7 @@ module Uktt
     def goods_nomenclatures
       return '@chapter_id cannot be nil' if @chapter_id.nil?
 
-      fetch "#{GOODS_NOMENCLATURE}/chapter/#{@chapter_id}.json"
+      fetch "goods_nomenclatures/chapter/#{@chapter_id}.json"
     end
 
     def changes

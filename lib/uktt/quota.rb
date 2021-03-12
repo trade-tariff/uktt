@@ -1,6 +1,8 @@
 module Uktt
   # A Quota object for dealing with an API resource
   class Quota
+    QUOTA = 'quotas'.freeze
+
     attr_accessor :config
 
     def initialize(opts = {})

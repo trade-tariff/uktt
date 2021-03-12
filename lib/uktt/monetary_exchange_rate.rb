@@ -1,6 +1,8 @@
 module Uktt
   # A MonetaryExchangeRate object for dealing with an API resource
   class MonetaryExchangeRate
+    M_X_RATE = 'monetary_exchange_rates'.freeze
+
     attr_accessor :monetary_exchange_rate_id, :config, :response
 
     def initialize(opts = {})

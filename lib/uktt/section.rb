@@ -1,6 +1,8 @@
 module Uktt
   # A Section object for dealing with an API resource
   class Section
+    SECTION = 'sections'.freeze
+
     attr_accessor :config, :section_id
 
     def initialize(opts = {})
@@ -22,7 +24,7 @@ module Uktt
     def goods_nomenclatures
       return '@section_id cannot be nil' if @section_id.nil?
 
-      fetch "#{GOODS_NOMENCLATURE}/section/#{@section_id}.json"
+      fetch "goods_nomenclatures/section/#{@section_id}.json"
     end
 
     def note
