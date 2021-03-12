@@ -1,7 +1,7 @@
 require 'uktt'
 
 RSpec.describe Uktt::Http do
-  subject(:client) { described_class.new(host, version, debug, conn) }
+  subject(:client) { described_class.new(host, version, debug, conn, format) }
 
   let(:version) { 'v2' }
   let(:debug) { false }
@@ -9,6 +9,7 @@ RSpec.describe Uktt::Http do
   let(:response) { double }
   let(:parser) { double(parse: {}) }
   let(:host) { 'http://localhost' }
+  let(:format) { 'ostruct' }
 
   describe '#retrieve' do
     before do
@@ -49,15 +50,12 @@ RSpec.describe Uktt::Http do
     end
 
     context 'when a query param is specified in the config' do
-      before do
-        Uktt.configure(format: 'jsonapi', version: 'v2', query: { 'filter[geographical_area_id]' => 'RO' })
-      end
-
+      let(:query) { { 'filter[geographical_area_id]' => 'RO' } }
       let(:host) { 'http://localhost' }
       let(:expected_url) { 'http://localhost/api/v2/commodities/1234567890?filter[geographical_area_id]=RO' }
 
       it 'uses the correct full url with the query constructed' do
-        client.retrieve('commodities/1234567890')
+        client.retrieve('commodities/1234567890', query)
 
         expect(conn).to have_received(:get).with(expected_url, expected_body, expected_headers)
       end

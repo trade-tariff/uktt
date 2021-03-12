@@ -4,9 +4,10 @@ require 'faraday_middleware'
 module Uktt
   # An object for handling network requests
   class Http
-    def initialize(host = nil, version = nil, debug = false, conn = nil)
+    def initialize(host = nil, version = nil, debug = false, conn = nil, format = 'jsonapi')
       @host = host || API_HOST_LOCAL
       @version = version || API_VERSION
+      @format = format
 
       @conn = conn || Faraday.new(url: @host) do |faraday|
         faraday.use FaradayMiddleware::FollowRedirects
@@ -15,21 +16,21 @@ module Uktt
       end
     end
 
-    def retrieve(resource, format = 'ostruct')
+    def retrieve(resource, query_config = {})
       full_url = File.join(@host, 'api', @version, resource)
-      full_url = "#{full_url}#{query}"
+      full_url = "#{full_url}#{query_params(query_config)}"
       headers  = { 'Content-Type' => 'application/json' }
       response = @conn.get(full_url, {}, headers)
 
-      Parser.new(response.body, format).parse
+      Parser.new(response.body, @format).parse
     end
 
     private
 
-    def query
-      return '' if Uktt.config[:query].empty?
+    def query_params(query_config)
+      return '' if query_config.empty?
 
-      query = Uktt.config[:query].map do |key, value|
+      query = query_config.map do |key, value|
         "#{key}=#{value}"
       end
 
@@ -39,12 +40,6 @@ module Uktt
     class << self
       def use_production
         !ENV['PROD'].nil? && ENV['PROD'].casecmp('true').zero?
-      end
-
-      def spec_version
-        return @version unless @version.nil?
-
-        ENV['VER'] ? ENV['VER'].to_s : 'v1'
       end
 
       def api_host
