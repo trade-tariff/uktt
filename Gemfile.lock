@@ -4,10 +4,6 @@ PATH
     uktt (1.0.0)
       faraday
       faraday_middleware
-      nokogiri
-      prawn
-      prawn-table
-      thor
 
 GEM
   remote: https://rubygems.org/
@@ -39,17 +35,9 @@ GEM
     method_source (1.0.0)
     minitest (5.14.3)
     multipart-post (2.1.1)
-    nokogiri (1.11.1-x86_64-linux)
-      racc (~> 1.4)
     parallel (1.20.1)
     parser (3.0.0.0)
       ast (~> 2.4.1)
-    pdf-core (0.9.0)
-    prawn (2.4.0)
-      pdf-core (~> 0.9.0)
-      ttfunk (~> 1.7)
-    prawn-table (0.2.2)
-      prawn (>= 1.3.0, < 3.0.0)
     pry (0.13.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
@@ -57,7 +45,6 @@ GEM
       byebug (~> 11.0)
       pry (~> 0.13.0)
     public_suffix (4.0.6)
-    racc (1.5.2)
     rack (2.2.3)
     rainbow (3.0.0)
     rake (13.0.1)
@@ -103,9 +90,7 @@ GEM
       rubocop (>= 0.87.0)
     ruby-progressbar (1.11.0)
     ruby2_keywords (0.0.4)
-    thor (1.1.0)
     thread_safe (0.3.6)
-    ttfunk (1.7.0)
     tzinfo (1.2.9)
       thread_safe (~> 0.1)
     unicode-display_width (1.7.0)

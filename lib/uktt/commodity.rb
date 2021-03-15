@@ -10,9 +10,5 @@ module Uktt
     def changes(commodity_id)
       fetch "#{RESOURCE_PATH}/#{commodity_id}/changes.json"
     end
-
-    def find(id_or_type)
-      @response.included.find { |obj| obj.id == id_or_type || obj.type == id_or_type }
-    end
   end
 end
