@@ -1,15 +1,8 @@
+Dir[File.join(__dir__, 'uktt', 'resources', '*.rb')].sort.each { |file| require file }
+
 require 'uktt/version'
-require 'uktt/base'
-require 'uktt/chapter'
-require 'uktt/commodity'
-require 'uktt/country'
-require 'uktt/exchange_rate'
-require 'uktt/geographical_area'
-require 'uktt/heading'
 require 'uktt/http'
 require 'uktt/parser'
-require 'uktt/quota'
-require 'uktt/section'
 
 module Uktt
   API_HOST_PROD           = 'https://www.trade-tariff.service.gov.uk'.freeze

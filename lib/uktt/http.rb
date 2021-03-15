@@ -36,17 +36,5 @@ module Uktt
 
       "?#{query.join(',')}"
     end
-
-    class << self
-      def use_production
-        !ENV['PROD'].nil? && ENV['PROD'].casecmp('true').zero?
-      end
-
-      def api_host
-        return ENV['HOST'] if ENV['HOST']
-
-        use_production ? Uktt::API_HOST_PROD : Uktt::API_HOST_LOCAL
-      end
-    end
   end
 end
