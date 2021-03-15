@@ -15,18 +15,6 @@ RSpec.configure do |config|
   end
 end
 
-def use_production
-  Uktt::Http.use_production
-end
-
-def spec_version
-  Uktt::Http.spec_version
-end
-
-def api_host
-  Uktt::Http.api_host
-end
-
 def read_file(fixture)
   fixture_path = 'spec/fixtures'
   path = File.join(fixture_path, fixture)

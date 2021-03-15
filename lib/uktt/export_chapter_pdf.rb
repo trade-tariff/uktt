@@ -33,7 +33,8 @@ class ExportChapterPdf
   CAP_LICENCE_KEY = 'CAP_LICENCE'.freeze
   CAP_REFERENCE_TEXT = 'CAP licencing may apply. Specific licence requirements for this commodity can be obtained from the Rural Payment Agency website (www.rpa.gov.uk) under RPA Schemes.'.freeze
 
-  def initialize(opts = {})
+  def initialize(http, opts = {})
+    @http = http
     @opts = opts
     @chapter_id = opts[:chapter_id]
 
@@ -63,8 +64,9 @@ class ExportChapterPdf
     set_fonts
 
     unless @chapter_id.to_s == 'test'
-      @chapter = Uktt::Chapter.new(@opts.merge(chapter_id: @chapter_id, version: 'v2')).retrieve
-      @section = Uktt::Section.new(@opts.merge(section_id: @chapter.data.relationships.section.data.id, version: 'v2')).retrieve
+      @chapter = Uktt::Chapter.new(@http).retrieve(@chapter_id)
+      @section_id = @chapter.data.relationships.section.data.id
+      @section = Uktt::Section.new(http).retrieve(@section_id)
       @current_heading = @section[:data][:attributes][:position]
     end
 
@@ -119,11 +121,11 @@ class ExportChapterPdf
   def fetch_exchange_rate(currency = @currency)
     return 1.0 unless currency
 
-    return 1.0 if currency === Uktt::PARENT_CURRENCY
+    return 1.0 if currency === Uktt::DEFAULT_PARENT_CURRENCY
 
     response = ENV.fetch("MX_RATE_EUR_#{currency}") { |_missing_name|
       if currency === 'GBP'
-        Uktt::MonetaryExchangeRate.new(version: 'v2').latest(currency)
+        Uktt::MonetaryExchangeRate.new(http).latest(currency)
       else
         raise StandardError, "Non-GBP currency exchange rates are not available via API and must be manually set with an environment variable, e.g., 'MX_RATE_EUR_#{currency}'"
       end
@@ -617,8 +619,7 @@ class ExportChapterPdf
 
       commodity_objs.each do |c|
         if c.attributes.leaf
-          @uktt = Uktt::Commodity.new(@opts.merge(commodity_id: c.attributes.goods_nomenclature_item_id, version: 'v2'))
-          v2_commodity = @uktt.retrieve
+          v2_commodity = Uktt::Commodity.new(http).retrieve(c.attributes.goods_nomenclature_item_id)
 
           if v2_commodity.data
             result << commodity_row(v2_commodity)
@@ -1214,8 +1215,6 @@ class ExportChapterPdf
   end
 
   def pr_measures(v2_commodity)
-    # c = Uktt::Commodity.new(commodity_id: '3403910000')
-    # v2 = c.retrieve
     v2_commodity.included.select { |obj| obj.type == 'measure' && measure_is_pr(obj) }
   end
 
