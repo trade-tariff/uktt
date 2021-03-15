@@ -6,7 +6,6 @@ Uktt provides a way to work with the UK Trade Tariff API, https://api.trade-tari
 
 - Fetches sections, chapters, headings, commodities, goods_nomenclatures, monetary exchange rates, and quota definitions from the Tariff API
 - Tests local, production, and any other Frontend API servers using real (not mocked) API calls
-- Produces printable Tariff PDF files for chapters
 - Command-line interface
 
 ## Installation
@@ -68,25 +67,6 @@ E.g., use a heading object to retrieve all associated goods nomenclatures:
 > h.goods_nomenclatures
 
 # => #<OpenStruct data=[#<OpenStruct id="27624", type="goods_nomenclature", attributes=#<OpenStruct goods_nomenclature_item_id="0101000000", ... >>]>
-```
-
-### PDF
-
-The Uktt gem can produce PDF files for individual chapters of the Tariff.
-
-Set `chapter_id` and optional `filepath` with a hash.
-
-```ruby
-# Generate the pdf cover
-cover_path = '/tmp/cover.pdf'
-pdf = Uktt::Pdf.new(client, cover_path)
-pdf.make_cover
-
-# Generate pdf for a given chapter
-chapter_path = '/tmp/chapter_1.pdf'
-chapter_id = '1'
-pdf = Uktt::Pdf.new(client, chapter_path)
-pdf.make_chapter(chapter_id)
 ```
 
 ## Development
