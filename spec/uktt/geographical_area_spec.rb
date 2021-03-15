@@ -3,11 +3,11 @@ RSpec.describe Uktt::GeographicalArea do
 
   let(:http) { instance_double('Uktt::Http') }
 
-  describe '#retrieve' do
+  describe '#retrieve_all' do
     it 'performs a retrieve of geographical_areas' do
-      allow(http).to receive(:retrieve).with('geographical_areas', {})
+      allow(http).to receive(:retrieve).with('geographical_areas.json', {})
 
-      geographical_area.retrieve
+      geographical_area.retrieve_all
     end
   end
 end
