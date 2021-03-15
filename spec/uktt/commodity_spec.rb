@@ -1,21 +1,5 @@
-RSpec.describe Uktt::Commodity do
+RSpec.describe Uktt::Commodity, :http do
   subject(:commodity) { described_class.new(http) }
-
-  let(:http) do
-    Uktt::Http.new(
-      host,
-      version,
-      debug,
-      conn,
-      format,
-    )
-  end
-
-  let(:host) { 'https://dev.trade-tariff.service.gov.uk' }
-  let(:version) { 'v2' }
-  let(:debug) { false }
-  let(:conn) { nil }
-  let(:format) { 'jsonapi' }
 
   let(:commodity_id) { '0101210000' }
 

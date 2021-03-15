@@ -1,31 +1,48 @@
-require 'faraday'
-require 'faraday_middleware'
+require 'net/http'
+require 'uri'
 
 module Uktt
-  # An object for handling network requests
   class Http
-    def initialize(host = nil, version = nil, debug = false, conn = nil, format = 'jsonapi')
-      @host = host || API_HOST_LOCAL
-      @version = version || API_VERSION
+    def initialize(connection, service, version, format)
+      @connection = connection
+      @service = service
+      @version = version
       @format = format
-
-      @conn = conn || Faraday.new(url: @host) do |faraday|
-        faraday.use FaradayMiddleware::FollowRedirects
-        faraday.response(:logger) if debug
-        faraday.adapter Faraday.default_adapter
-      end
     end
 
     def retrieve(resource, query_config = {})
-      full_url = File.join(@host, 'api', @version, resource)
-      full_url = "#{full_url}#{query_params(query_config)}"
-      headers  = { 'Content-Type' => 'application/json' }
-      response = @conn.get(full_url, {}, headers)
+      resource = File.join(@service, 'api', @version, resource)
+      resource = "#{resource}#{query_params(query_config)}"
+
+      response = do_fetch(resource)
 
       Parser.new(response.body, @format).parse
     end
 
+    def self.build(host, version, format)
+      uri = URI(host)
+      connection = Net::HTTP.new(uri.host, uri.port)
+      connection.use_ssl = uri.scheme.include?('https')
+      service = uri.path
+
+      new(connection, service, version, format)
+    end
+
     private
+
+    def do_fetch(resource, redirect_limit = 2)
+      request = Net::HTTP::Get.new(resource)
+      request['Content-Type'] = 'application/json'
+
+      response = @connection.request(request)
+
+      case response
+      when Net::HTTPSuccess     then response
+      when Net::HTTPRedirection then do_fetch(response['location'], redirect_limit - 1)
+      else
+        response.error!
+      end
+    end
 
     def query_params(query_config)
       return '' if query_config.empty?

@@ -1,21 +1,5 @@
-RSpec.describe Uktt::Section do
+RSpec.describe Uktt::Section, :http do
   subject(:section) { described_class.new(http) }
-
-  let(:http) do
-    Uktt::Http.new(
-      host,
-      version,
-      debug,
-      conn,
-      format,
-    )
-  end
-
-  let(:host) { 'https://dev.trade-tariff.service.gov.uk' }
-  let(:version) { 'v2' }
-  let(:debug) { false }
-  let(:conn) { nil }
-  let(:format) { 'jsonapi' }
 
   let(:section_id) { '1' }
 
