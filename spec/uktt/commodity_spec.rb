@@ -62,4 +62,34 @@ RSpec.describe Uktt::Commodity do
       end
     end
   end
+
+  describe '#find' do
+    let(:format) { 'ostruct' }
+
+    before do
+      commodity.retrieve(commodity_id)
+    end
+
+    context 'when finding by id' do
+      let(:type_or_id) { '20097964-duty_expression' }
+      let(:expected_id) { '20097964-duty_expression' }
+
+      it 'returns the object' do
+        result = commodity.find(type_or_id)
+
+        expect(result.id).to eq(expected_id)
+      end
+    end
+
+    context 'when finding by type' do
+      let(:type_or_id) { 'duty_expression' }
+      let(:expected_id) { '20097964-duty_expression' }
+
+      it 'returns the object' do
+        result = commodity.find(type_or_id)
+
+        expect(result.id).to eq(expected_id)
+      end
+    end
+  end
 end
