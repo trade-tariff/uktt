@@ -3,12 +3,22 @@ require 'json-schema'
 require 'pry'
 require 'uktt'
 
+RSpec.shared_context :http_resources do
+  let(:http) { Uktt::Http.build(host, version, format) }
+
+  let(:host) { 'https://dev.trade-tariff.service.gov.uk' }
+  let(:version) { 'v2' }
+  let(:format) { 'jsonapi' }
+end
+
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
   config.example_status_persistence_file_path = '.rspec_status'
 
   # Disable RSpec exposing methods globally on `Module` and `main`
   config.disable_monkey_patching!
+
+  config.include_context :http_resources, :http
 
   config.expect_with :rspec do |c|
     c.syntax = :expect

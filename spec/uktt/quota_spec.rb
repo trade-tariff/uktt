@@ -1,21 +1,5 @@
-RSpec.describe Uktt::Quota do
+RSpec.describe Uktt::Quota, :http do
   subject(:quota) { described_class.new(http) }
-
-  let(:http) do
-    Uktt::Http.new(
-      host,
-      version,
-      debug,
-      conn,
-      format,
-    )
-  end
-
-  let(:host) { 'https://dev.trade-tariff.service.gov.uk' }
-  let(:version) { 'v2' }
-  let(:debug) { false }
-  let(:conn) { nil }
-  let(:format) { 'jsonapi' }
 
   describe '#search' do
     let(:params) do
