@@ -3,10 +3,6 @@ module Uktt
   class Heading < Base
     RESOURCE_PATH = 'headings'.freeze
 
-    def retrieve(heading_id)
-      fetch "#{RESOURCE_PATH}/#{heading_id}.json"
-    end
-
     def changes(heading_id)
       fetch "#{RESOURCE_PATH}/#{heading_id}/changes.json"
     end
