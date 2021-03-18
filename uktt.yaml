@@ -1,5 +1,0 @@
----
-  host: https://dev.trade-tariff.service.gov.uk/api
-  version: v2
-  debug: false
-  format: ostruct
