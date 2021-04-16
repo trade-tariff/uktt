@@ -23,8 +23,8 @@ jobs:
           COVERAGE: 1
     steps:
       - checkout
-      - ruby/install-deps
-      - ruby/rspec-test
+      # - ruby/install-deps
+      # - ruby/rspec-test
 
 workflows:
   version: 2
