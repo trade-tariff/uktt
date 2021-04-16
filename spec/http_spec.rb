@@ -36,40 +36,10 @@ RSpec.describe Uktt::Http do
       expect(Uktt::Parser).to have_received(:new).with('{}', 'ostruct')
     end
 
-    context 'when the host includes xi in the path' do
-      let(:host) { 'http://localhost' }
-      let(:service) { '/xi' }
-      let(:expected_path) { '/xi/api/v2/commodities/1234567890' }
-
-      it 'uses the correct full path' do
-        client.retrieve('commodities/1234567890')
-
-        expect(connection).to have_received(:request) do |request|
-          expect(request.path).to eq(expected_path)
-          expect(request['Content-Type']).to eq('application/json')
-        end
-      end
-    end
-
-    context 'when the host does not include xi in the path' do
-      let(:host) { 'http://localhost' }
-      let(:service) { '' }
-      let(:expected_path) { '/api/v2/commodities/1234567890' }
-
-      it 'uses the correct full url' do
-        client.retrieve('commodities/1234567890')
-
-        expect(connection).to have_received(:request) do |request|
-          expect(request.path).to eq(expected_path)
-          expect(request['Content-Type']).to eq('application/json')
-        end
-      end
-    end
-
     context 'when a query is passed request' do
       let(:query) { { 'filter[geographical_area_id]' => 'RO' } }
       let(:host) { 'http://localhost' }
-      let(:expected_path) { '/api/v2/commodities/1234567890?filter[geographical_area_id]=RO' }
+      let(:expected_path) { '/commodities/1234567890?filter[geographical_area_id]=RO' }
 
       it 'uses the correct full url with the query constructed' do
         client.retrieve('commodities/1234567890', query)
@@ -77,6 +47,7 @@ RSpec.describe Uktt::Http do
         expect(connection).to have_received(:request) do |request|
           expect(request.path).to eq(expected_path)
           expect(request['Content-Type']).to eq('application/json')
+          expect(request['Accept']).to eq('application/vnd.uktt.v2')
         end
       end
     end

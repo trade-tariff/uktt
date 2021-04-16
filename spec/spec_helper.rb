@@ -6,7 +6,7 @@ require 'uktt'
 RSpec.shared_context 'with http resources' do
   let(:http) { Uktt::Http.build(host, version, format) }
 
-  let(:host) { 'https://dev.trade-tariff.service.gov.uk' }
+  let(:host) { 'http://localhost:3000/' }
   let(:version) { 'v2' }
   let(:format) { 'jsonapi' }
 end

@@ -11,8 +11,7 @@ module Uktt
     end
 
     def retrieve(resource, query_config = {})
-      resource = File.join(@service, 'api', @version, resource)
-      resource = "#{resource}#{query_params(query_config)}"
+      resource = "/#{resource}#{query_params(query_config)}"
 
       response = do_fetch(resource)
 
@@ -32,8 +31,8 @@ module Uktt
 
     def do_fetch(resource, redirect_limit = 2)
       request = Net::HTTP::Get.new(resource)
+      request['Accept'] = "application/vnd.uktt.#{@version}"
       request['Content-Type'] = 'application/json'
-
       response = @connection.request(request)
 
       case response
