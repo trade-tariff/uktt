@@ -37,9 +37,9 @@ RSpec.describe Uktt::Http do
     end
 
     context 'when a query is passed request' do
-      let(:query) { { 'filter[geographical_area_id]' => 'RO' } }
+      let(:query) { { 'filter[geographical_area_id]' => 'RO', 'as_of' => '2022-09-11' } }
       let(:host) { 'http://localhost' }
-      let(:expected_path) { '/commodities/1234567890?filter[geographical_area_id]=RO' }
+      let(:expected_path) { '/commodities/1234567890?filter[geographical_area_id]=RO&as_of=2022-09-11' }
 
       it 'uses the correct full url with the query constructed' do
         client.retrieve('commodities/1234567890', query)
