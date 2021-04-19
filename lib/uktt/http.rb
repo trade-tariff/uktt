@@ -50,7 +50,7 @@ module Uktt
         "#{key}=#{value}"
       end
 
-      "?#{query.join(',')}"
+      "?#{query.join('&')}"
     end
   end
 end
