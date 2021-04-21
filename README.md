@@ -12,7 +12,7 @@ Uktt provides a way to work with the UK Trade Tariff API, https://api.trade-tari
 
 ## Installation
 
-The repository is here: __https://github.com/TransformCore/uktt/__
+The repository is here: __https://github.com/trade-tariff/uktt/__
 
 Add to your Gemfile:
 
@@ -83,7 +83,7 @@ After checking out the repo, run `bin/setup` to install dependencies. Then, run 
 
 ## Contributing
 
-Code: https://github.com/TransformCore/uktt.
+Code: https://github.com/trade-tariff/uktt.
 
 This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
