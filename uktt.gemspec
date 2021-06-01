@@ -18,6 +18,8 @@ Gem::Specification.new do |spec|
 
   spec.require_paths = %w[lib]
 
+  spec.add_dependency 'retriable'
+
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'json-schema'
   spec.add_development_dependency 'pry-byebug'
