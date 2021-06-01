@@ -1,37 +1,49 @@
 require 'net/http'
 require 'uri'
+require 'retriable'
 
 module Uktt
   class Http
-    def initialize(connection, service, version, format)
+    DEFAULT_BACKEND_SERVICE = 'uk'.freeze
+    DEFAULT_PARSED_FORMAT = 'jsonapi'.freeze
+    DEFAULT_RETRIABLE_INTERVALS = [0.5, 1.0, 2.0, 2.5, 20.0].freeze
+    DEFAULT_VERSION = 'v2'.freeze
+
+    def initialize(connection, options)
       @connection = connection
-      @service = service
-      @version = version
-      @format = format
+      @options = options
     end
 
     def retrieve(resource, query_config = {})
       resource = "/#{resource}#{query_params(query_config)}"
 
-      response = do_fetch(resource)
+      response = Retriable.retriable(intervals: retriable_intervals) do
+        do_fetch(resource)
+      end
 
-      Parser.new(response.body, @format).parse
+      Parser.new(response.body, format).parse
     end
 
-    def self.build(host, version, format)
+    def self.build(host, version, format, retriable_intervals = nil)
       uri = URI(host)
       connection = Net::HTTP.new(uri.host, uri.port)
       connection.use_ssl = uri.scheme.include?('https')
-      service = uri.path
 
-      new(connection, service, version, format)
+      options = {
+        format: format,
+        retriable_intervals: retriable_intervals,
+        service: uri.path,
+        version: version,
+      }
+
+      new(connection, options)
     end
 
     private
 
     def do_fetch(resource, redirect_limit = 2)
       request = Net::HTTP::Get.new(resource)
-      request['Accept'] = "application/vnd.uktt.#{@version}"
+      request['Accept'] = "application/vnd.uktt.#{version}"
       request['Content-Type'] = 'application/json'
       response = @connection.request(request)
 
@@ -51,6 +63,22 @@ module Uktt
       end
 
       "?#{query.join('&')}"
+    end
+
+    def service
+      @options.fetch(:service, DEFAULT_BACKEND_SERVICE)
+    end
+
+    def format
+      @options.fetch(:format, DEFAULT_PARSED_FORMAT)
+    end
+
+    def version
+      @options.fetch(:version, DEFAULT_PARSED_FORMAT)
+    end
+
+    def retriable_intervals
+      @options.fetch(:retriable_intervals, DEFAULT_RETRIABLE_INTERVALS)
     end
   end
 end

@@ -1,22 +1,32 @@
 require 'uktt'
 
 RSpec.describe Uktt::Http do
-  subject(:client) { described_class.new(connection, service, version, format) }
+  subject(:client) { described_class.new(connection, options) }
 
   let(:connection) { double }
   let(:service) { '' }
   let(:version) { 'v2' }
   let(:format) { 'ostruct' }
+  let(:retriable_intervals) { [] }
 
   let(:response) { Net::HTTPSuccess.new(nil, body, nil) }
   let(:body) { '{}' }
   let(:parser) { double(parse: {}) }
 
+  let(:options) do
+    {
+      format: format,
+      retriable_intervals: retriable_intervals,
+      service: service,
+      version: version,
+    }
+  end
+
   describe '.build' do
     let(:host) { 'http://localhost' }
 
     it 'builds a Uktt::Http client instance' do
-      expect(described_class.build(host, version, format)).to be_a(described_class)
+      expect(described_class.build(host, version, format, retriable_intervals)).to be_a(described_class)
     end
   end
 
@@ -25,6 +35,7 @@ RSpec.describe Uktt::Http do
       allow(connection).to receive(:request).and_return(response)
       allow(response).to receive(:body).and_return('{}')
       allow(Uktt::Parser).to receive(:new).and_return(parser)
+      allow(Retriable).to receive(:retriable).and_call_original
     end
 
     let(:expected_headers) { { 'Content-Type' => 'application/json' } }
@@ -34,6 +45,12 @@ RSpec.describe Uktt::Http do
       client.retrieve('commodities/1234567890')
 
       expect(Uktt::Parser).to have_received(:new).with('{}', 'ostruct')
+    end
+
+    it 'uses the retriable implementation to retry on failure' do
+      client.retrieve('commodities/1234567890')
+
+      expect(Retriable).to have_received(:retriable)
     end
 
     context 'when a query is passed request' do
