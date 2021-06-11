@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    uktt (2.1.0)
+    uktt (2.2.0)
       retriable
 
 GEM
@@ -96,7 +96,6 @@ DEPENDENCIES
   json-schema
   pry-byebug
   rake
-  retriable
   rspec
   rspec_junit_formatter
   rubocop-govuk
