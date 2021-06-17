@@ -17,7 +17,8 @@ module Uktt
 
     def retrieve(resource, query_config = {})
       resource = File.join(service, 'api', version, resource) if public?
-      resource = "/#{resource}#{query_params(query_config)}"
+      resource = File.join('/', resource)
+      resource = "#{resource}#{query_params(query_config)}"
 
       response = Retriable.retriable(intervals: retriable_intervals) do
         do_fetch(resource)
