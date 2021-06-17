@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    uktt (2.2.0)
+    uktt (2.2.1)
       retriable
 
 GEM
