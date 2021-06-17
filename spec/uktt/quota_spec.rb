@@ -7,7 +7,7 @@ RSpec.describe Uktt::Quota, :http do
         goods_nomenclature_item_id: '0805102200',
         year: '2018',
         geographical_area_id: 'EG',
-        order_number: '050006',
+        order_number: '091784',
         status: 'not_blocked',
       }
     end
