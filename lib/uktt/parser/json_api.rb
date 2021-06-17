@@ -6,9 +6,10 @@ module Uktt
       end
 
       def parse
-        if data.is_a?(Hash)
+        case data
+        when Hash
           parse_resource(data)
-        elsif data.is_a?(Array)
+        when Array
           parse_collection(data)
         else
           data
@@ -47,12 +48,13 @@ module Uktt
 
       def parse_relationships!(relationships, parent)
         relationships.each do |name, values|
-          parent[name] = if values['data'].is_a?(Array)
+          parent[name] = case values['data']
+                         when Array
                            values['data'].map do |v|
                              record = find_included(v['id'], v['type'])
                              parse_record(record)
                            end
-                         elsif values['data'].is_a?(Hash)
+                         when Hash
                            record = find_included(values['data']['id'], values['data']['type'])
                            parse_record(record)
                          else
