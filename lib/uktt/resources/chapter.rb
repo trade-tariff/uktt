@@ -1,5 +1,4 @@
 module Uktt
-  # A Chapter object for dealing with an API resource
   class Chapter < Base
     RESOURCE_PATH = 'chapters'.freeze
 

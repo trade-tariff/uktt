@@ -1,5 +1,4 @@
 module Uktt
-  # A Quota object for dealing with an API resource
   class Quota < Base
     RESOURCE_PATH = 'quotas'.freeze
 

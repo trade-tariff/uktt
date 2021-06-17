@@ -1,5 +1,4 @@
 module Uktt
-  # A Chapter object for dealing with an API resource
   class Heading < Base
     RESOURCE_PATH = 'headings'.freeze
 
