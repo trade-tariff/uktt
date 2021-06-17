@@ -8,6 +8,7 @@ RSpec.describe Uktt::Http do
   let(:version) { 'v2' }
   let(:format) { 'ostruct' }
   let(:retriable_intervals) { [] }
+  let(:public_routes) { false }
 
   let(:response) { Net::HTTPSuccess.new(nil, body, nil) }
   let(:body) { '{}' }
@@ -19,6 +20,7 @@ RSpec.describe Uktt::Http do
       retriable_intervals: retriable_intervals,
       service: service,
       version: version,
+      public: public_routes,
     }
   end
 
@@ -36,10 +38,17 @@ RSpec.describe Uktt::Http do
       allow(response).to receive(:body).and_return('{}')
       allow(Uktt::Parser).to receive(:new).and_return(parser)
       allow(Retriable).to receive(:retriable).and_call_original
+      allow(Net::HTTP::Get).to receive(:new).and_call_original
     end
 
     let(:expected_headers) { { 'Content-Type' => 'application/json' } }
     let(:expected_body) { {} }
+
+    it 'initializes a request object with the correct resource' do
+      client.retrieve('commodities/1234567890')
+
+      expect(Net::HTTP::Get).to have_received(:new).with('/commodities/1234567890')
+    end
 
     it 'passes the body and format to the Parser' do
       client.retrieve('commodities/1234567890')
@@ -53,7 +62,17 @@ RSpec.describe Uktt::Http do
       expect(Retriable).to have_received(:retriable)
     end
 
-    context 'when a query is passed request' do
+    context 'when public routes are specified' do
+      let(:public_routes) { true }
+
+      it 'initializes a request object with the correct resource' do
+        client.retrieve('commodities/1234567890')
+
+        expect(Net::HTTP::Get).to have_received(:new).with('/api/v2/commodities/1234567890')
+      end
+    end
+
+    context 'when a query is passed' do
       let(:query) { { 'filter[geographical_area_id]' => 'RO', 'as_of' => '2022-09-11' } }
       let(:host) { 'http://localhost' }
       let(:expected_path) { '/commodities/1234567890?filter[geographical_area_id]=RO&as_of=2022-09-11' }
