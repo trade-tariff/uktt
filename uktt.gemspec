@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   end
 
   spec.require_paths = %w[lib]
-  spec.required_ruby_version = '> 2.7.3'
+  spec.required_ruby_version = '~> 2.7.3'
 
   spec.add_dependency 'retriable'
 
