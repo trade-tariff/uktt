@@ -51,12 +51,12 @@ module Uktt
           parent[name] = case values['data']
                          when Array
                            values['data'].map do |v|
-                             record = find_included(v['id'], v['type'])
-                             parse_record(record)
+                             resource = find_included(v['id'], v['type'])
+                             parse_resource(resource)
                            end
                          when Hash
-                           record = find_included(values['data']['id'], values['data']['type'])
-                           parse_record(record)
+                           resource = find_included(values['data']['id'], values['data']['type'])
+                           parse_resource(resource)
                          else
                            values['data']
                          end
@@ -65,14 +65,6 @@ module Uktt
 
       def parse_meta!(resource, parent)
         parent['meta'] = resource['meta']
-      end
-
-      def parse_record(record)
-        record_attrs = record['attributes'].clone || {}
-        if record.key?('relationships')
-          parse_relationships!(record['relationships'], record_attrs)
-        end
-        record_attrs
       end
 
       def find_included(id, type)
