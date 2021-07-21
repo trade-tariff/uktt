@@ -4,11 +4,11 @@ RSpec.describe Uktt::Quota, :http do
   describe '#search' do
     let(:params) do
       {
-        goods_nomenclature_item_id: '0805102200',
-        year: '2018',
-        geographical_area_id: 'EG',
-        order_number: '091784',
-        status: 'not_blocked',
+        day: '15',
+        month: '02',
+        year: '2021',
+        geographical_area_id: 'IL',
+        order_number: '051341',
       }
     end
 
