@@ -43,6 +43,7 @@ module Uktt
       end
 
       def parse_top_level_attributes!(attributes, parent)
+        parent['id'] = attributes['id']
         parent.merge!(attributes['attributes'])
       end
 
