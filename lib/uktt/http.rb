@@ -5,7 +5,7 @@ module Uktt
   class Http
     DEFAULT_BACKEND_SERVICE = 'uk'.freeze
     DEFAULT_PARSED_FORMAT = 'jsonapi'.freeze
-    DEFAULT_RETRIABLE_OPTIONS = {
+    DEFAULT_RETRY_OPTIONS = {
       max: 2,
       interval: 2.0,
       interval_randomness: 0.5,
@@ -26,18 +26,18 @@ module Uktt
       Parser.new(response.body, format).parse
     end
 
-    def self.build(host, version, format, public_routes, retriable_options = nil)
+    def self.build(host, version, format, public_routes, retry_options = nil)
       connection = Faraday.new(url: host) do |faraday|
         faraday.use FaradayMiddleware::FollowRedirects
         faraday.use Faraday::Response::RaiseError
-        faraday.adapter :net_http_persistent
         faraday.response :logger if ENV['DEBUG_REQUESTS']
+        faraday.request :retry, retry_options || DEFAULT_RETRY_OPTIONS
+        faraday.adapter :net_http_persistent
       end
 
       options = {
         host: host,
         format: format,
-        retriable_options: retriable_options,
         public: public_routes,
         version: version,
       }
@@ -72,10 +72,6 @@ module Uktt
 
     def version
       @options.fetch(:version, DEFAULT_VERSION)
-    end
-
-    def retriable_options
-      @options.fetch(:retriable_options, DEFAULT_RETRIABLE_OPTIONS)
     end
 
     def public?
