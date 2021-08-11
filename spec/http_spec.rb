@@ -4,21 +4,21 @@ RSpec.describe Uktt::Http do
   subject(:client) { described_class.new(connection, options) }
 
   let(:connection) { double }
-  let(:service) { '' }
+  let(:host) { 'http://example.com/xi' }
   let(:version) { 'v2' }
   let(:format) { 'ostruct' }
   let(:retriable_intervals) { [] }
   let(:public_routes) { false }
 
-  let(:response) { Net::HTTPSuccess.new(nil, body, nil) }
+  let(:response) { instance_double('Faraday::Response', body: body) }
   let(:body) { '{}' }
   let(:parser) { double(parse: {}) }
 
   let(:options) do
     {
+      host: host,
       format: format,
       retriable_intervals: retriable_intervals,
-      service: service,
       version: version,
       public: public_routes,
     }
@@ -34,20 +34,21 @@ RSpec.describe Uktt::Http do
 
   describe '#retrieve' do
     before do
-      allow(connection).to receive(:request).and_return(response)
-      allow(response).to receive(:body).and_return('{}')
+      allow(connection).to receive(:get).and_return(response)
       allow(Uktt::Parser).to receive(:new).and_return(parser)
-      allow(Retriable).to receive(:retriable).and_call_original
-      allow(Net::HTTP::Get).to receive(:new).and_call_original
     end
 
     let(:expected_headers) { { 'Content-Type' => 'application/json' } }
     let(:expected_body) { {} }
 
-    it 'initializes a request object with the correct resource' do
+    it 'makes a get request with the correct resource, query and headers' do
       client.retrieve('commodities/1234567890')
 
-      expect(Net::HTTP::Get).to have_received(:new).with('/commodities/1234567890')
+      expect(connection).to have_received(:get).with(
+        'commodities/1234567890',
+        {},
+        { 'Accept' => 'application/vnd.uktt.v2', 'Content-Type' => 'application/json' },
+      )
     end
 
     it 'passes the body and format to the Parser' do
@@ -56,19 +57,17 @@ RSpec.describe Uktt::Http do
       expect(Uktt::Parser).to have_received(:new).with('{}', 'ostruct')
     end
 
-    it 'uses the retriable implementation to retry on failure' do
-      client.retrieve('commodities/1234567890')
-
-      expect(Retriable).to have_received(:retriable)
-    end
-
     context 'when public routes are specified' do
       let(:public_routes) { true }
 
-      it 'initializes a request object with the correct resource' do
+      it 'makes a get request with the correct resource, query and headers' do
         client.retrieve('commodities/1234567890')
 
-        expect(Net::HTTP::Get).to have_received(:new).with('/api/v2/commodities/1234567890')
+        expect(connection).to have_received(:get).with(
+          'http://example.com/xi/api/v2/commodities/1234567890',
+          {},
+          { 'Accept' => 'application/vnd.uktt.v2', 'Content-Type' => 'application/json' },
+        )
       end
     end
 
@@ -80,11 +79,11 @@ RSpec.describe Uktt::Http do
       it 'uses the correct full url with the query constructed' do
         client.retrieve('commodities/1234567890', query)
 
-        expect(connection).to have_received(:request) do |request|
-          expect(request.path).to eq(expected_path)
-          expect(request['Content-Type']).to eq('application/json')
-          expect(request['Accept']).to eq('application/vnd.uktt.v2')
-        end
+        expect(connection).to have_received(:get).with(
+          'commodities/1234567890',
+          { 'as_of' => '2022-09-11', 'filter[geographical_area_id]' => 'RO' },
+          { 'Accept' => 'application/vnd.uktt.v2', 'Content-Type' => 'application/json' },
+        )
       end
     end
   end
