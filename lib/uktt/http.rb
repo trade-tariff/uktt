@@ -1,12 +1,16 @@
-require 'net/http'
-require 'uri'
-require 'retriable'
+require 'faraday'
+require 'faraday_middleware'
 
 module Uktt
   class Http
     DEFAULT_BACKEND_SERVICE = 'uk'.freeze
     DEFAULT_PARSED_FORMAT = 'jsonapi'.freeze
-    DEFAULT_RETRIABLE_INTERVALS = [0.5, 1.0, 2.0, 2.5, 20.0].freeze
+    DEFAULT_RETRY_OPTIONS = {
+      max: 2,
+      interval: 2.0,
+      interval_randomness: 0.5,
+      backoff_factor: 2,
+    }.freeze
     DEFAULT_VERSION = 'v2'.freeze
     DEFAULT_PUBLIC_MODE = false
 
@@ -16,26 +20,24 @@ module Uktt
     end
 
     def retrieve(resource, query_config = {})
-      resource = File.join(service, 'api', version, resource) if public?
-      resource = File.join('/', resource)
-      resource = "#{resource}#{query_params(query_config)}"
-
-      response = Retriable.retriable(intervals: retriable_intervals) do
-        do_fetch(resource)
-      end
+      resource = File.join(host, 'api', version, resource) if public?
+      response = do_fetch(resource, query_config)
 
       Parser.new(response.body, format).parse
     end
 
-    def self.build(host, version, format, public_routes, retriable_intervals = nil)
-      uri = URI(host)
-      connection = Net::HTTP.new(uri.host, uri.port)
-      connection.use_ssl = uri.scheme.include?('https')
+    def self.build(host, version, format, public_routes, retry_options = nil)
+      connection = Faraday.new(url: host) do |faraday|
+        faraday.use FaradayMiddleware::FollowRedirects
+        faraday.use Faraday::Response::RaiseError
+        faraday.response :logger if ENV['DEBUG_REQUESTS']
+        faraday.request :retry, retry_options || DEFAULT_RETRY_OPTIONS
+        faraday.adapter :net_http_persistent
+      end
 
       options = {
+        host: host,
         format: format,
-        retriable_intervals: retriable_intervals,
-        service: uri.path,
         public: public_routes,
         version: version,
       }
@@ -45,29 +47,19 @@ module Uktt
 
     private
 
-    def do_fetch(resource, redirect_limit = 2)
-      request = Net::HTTP::Get.new(resource)
-      request['Accept'] = "application/vnd.uktt.#{version}"
-      request['Content-Type'] = 'application/json'
-
-      response = @connection.request(request)
-
-      case response
-      when Net::HTTPSuccess     then response
-      when Net::HTTPRedirection then do_fetch(response['location'], redirect_limit - 1)
-      else
-        response.error!
-      end
+    def do_fetch(resource, query_config)
+      @connection.get(resource, query_config, headers)
     end
 
-    def query_params(query_config)
-      return '' if query_config.empty?
+    def headers
+      {
+        'Accept' => "application/vnd.uktt.#{version}",
+        'Content-Type' => 'application/json',
+      }
+    end
 
-      query = query_config.map do |key, value|
-        "#{key}=#{value}"
-      end
-
-      "?#{query.join('&')}"
+    def host
+      @options[:host]
     end
 
     def service
@@ -80,10 +72,6 @@ module Uktt
 
     def version
       @options.fetch(:version, DEFAULT_VERSION)
-    end
-
-    def retriable_intervals
-      @options.fetch(:retriable_intervals, DEFAULT_RETRIABLE_INTERVALS)
     end
 
     def public?

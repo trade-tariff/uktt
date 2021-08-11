@@ -19,7 +19,10 @@ Gem::Specification.new do |spec|
   spec.require_paths = %w[lib]
   spec.required_ruby_version = '>= 2.7.4'
 
-  spec.add_dependency 'retriable'
+  spec.add_dependency 'faraday'
+  spec.add_dependency 'faraday_middleware'
+  spec.add_dependency 'faraday-net_http_persistent'
+  spec.add_dependency 'net-http-persistent'
 
   spec.add_development_dependency 'bundler'
   spec.add_development_dependency 'json-schema'
