@@ -7,7 +7,7 @@ module Uktt
     DEFAULT_PARSED_FORMAT = 'jsonapi'.freeze
     DEFAULT_RETRIABLE_OPTIONS = {
       max: 2,
-      interval: 0.05,
+      interval: 2.0,
       interval_randomness: 0.5,
       backoff_factor: 2,
     }.freeze
@@ -29,6 +29,7 @@ module Uktt
     def self.build(host, version, format, public_routes, retriable_options = nil)
       connection = Faraday.new(url: host) do |faraday|
         faraday.use FaradayMiddleware::FollowRedirects
+        faraday.use Faraday::Response::RaiseError
         faraday.adapter :net_http_persistent
         faraday.response :logger if ENV['DEBUG_REQUESTS']
       end
