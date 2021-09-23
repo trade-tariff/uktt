@@ -17,7 +17,7 @@ Gem::Specification.new do |spec|
   end
 
   spec.require_paths = %w[lib]
-  spec.required_ruby_version = '>= 2.7.4'
+  spec.required_ruby_version = '>= 3.0.2'
 
   spec.add_dependency 'faraday'
   spec.add_dependency 'faraday_middleware'
