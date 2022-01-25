@@ -36,10 +36,10 @@ module Uktt
       end
 
       options = {
-        host: host,
-        format: format,
+        host:,
+        format:,
         public: public_routes,
-        version: version,
+        version:,
       }
 
       new(connection, options)
