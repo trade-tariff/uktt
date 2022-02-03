@@ -10,7 +10,7 @@ RSpec.describe Uktt::Http do
   let(:retriable_intervals) { [] }
   let(:public_routes) { false }
 
-  let(:response) { instance_double('Faraday::Response', body: body) }
+  let(:response) { instance_double('Faraday::Response', body:) }
   let(:body) { '{}' }
   let(:parser) { double(parse: {}) }
 
