@@ -20,6 +20,8 @@ module Uktt
         @body['error'] || @body['errors']&.map { |error| error['detail'] }&.join(', ')
       end
 
+      class ParsingError < StandardError; end
+
       private
 
       def data
@@ -29,9 +31,9 @@ module Uktt
       def parse_resource(resource)
         result = {}
 
-        parse_top_level_attributes!(resource, result)
+        parse_top_level_attributes!(resource, result) if resource.key?('attributes')
         parse_relationships!(resource['relationships'], result) if resource.key?('relationships')
-        parse_meta!(resource, result)
+        parse_meta!(resource, result) if resource.key?('meta')
 
         result
       end
@@ -51,17 +53,37 @@ module Uktt
         relationships.each do |name, values|
           parent[name] = case values['data']
                          when Array
-                           values['data'].map do |v|
-                             resource = find_included(v['id'], v['type'])
-                             parse_resource(resource)
-                           end
+                           find_and_parse_multiple_included(name, values['data'])
                          when Hash
-                           resource = find_included(values['data']['id'], values['data']['type'])
-                           parse_resource(resource)
+                           find_and_parse_included(name, values['data']['id'], values['data']['type'])
                          else
                            values['data']
                          end
+        rescue NoMethodError
+          raise ParsingError, "Error parsing relationship: #{name}"
         end
+      end
+
+      def find_and_parse_multiple_included(name, records)
+        records.map do |record|
+          find_and_parse_included(name, record['id'], record['type'])
+        rescue NoMethodError
+          raise ParsingError,
+                "Error finding relationship '#{name}': #{record.inspect}"
+        end
+      end
+
+      def find_and_parse_included(name, id, type)
+        return nil if id.nil? || type.nil?
+
+        found_resource = find_included(id, type)
+
+        return {} if found_resource.nil? || found_resource.empty?
+
+        parse_resource(found_resource)
+      rescue NoMethodError
+        raise ParsingError,
+              "Error finding relationship - '#{name}', '#{id}', '#{type}': #{record.inspect}"
       end
 
       def parse_meta!(resource, parent)
