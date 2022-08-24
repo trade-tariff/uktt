@@ -17,7 +17,6 @@ module Uktt
     def initialize(connection, options)
       @connection = connection
       @options = options
-      Dotenv.load
     end
 
     def retrieve(resource, query_config = {})
