@@ -93,6 +93,5 @@ module Uktt
     def public?
       @options.fetch(:public, DEFAULT_PUBLIC_MODE)
     end
-
   end
 end
