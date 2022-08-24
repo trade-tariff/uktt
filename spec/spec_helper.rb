@@ -1,4 +1,5 @@
 require 'bundler/setup'
+require 'dotenv/load'
 require 'json-schema'
 require 'pry'
 require 'uktt'
