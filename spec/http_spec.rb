@@ -16,10 +16,10 @@ RSpec.describe Uktt::Http do
 
   let(:options) do
     {
-      host: host,
-      format: format,
-      retriable_intervals: retriable_intervals,
-      version: version,
+      host:,
+      format:,
+      retriable_intervals:,
+      version:,
       public: public_routes,
     }
   end
