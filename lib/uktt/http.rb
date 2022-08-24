@@ -26,23 +26,38 @@ module Uktt
       Parser.new(response.body, format).parse
     end
 
-    def self.build(host, version, format, public_routes, retry_options = nil)
-      connection = Faraday.new(url: host) do |faraday|
-        faraday.use FaradayMiddleware::FollowRedirects
-        faraday.use Faraday::Response::RaiseError
-        faraday.response :logger if ENV['DEBUG_REQUESTS']
-        faraday.request :retry, retry_options || DEFAULT_RETRY_OPTIONS
-        faraday.adapter :net_http_persistent
+    class << self
+      def build(host, version, format, public_routes, retry_options = nil)
+        connection = Faraday.new(url: host) do |faraday|
+          faraday.use FaradayMiddleware::FollowRedirects
+          faraday.use Faraday::Response::RaiseError
+          faraday.response :logger if ENV['DEBUG_REQUESTS']
+          faraday.request :basic_auth, basic_username, basic_password if basic_auth?
+          faraday.request :retry, retry_options || DEFAULT_RETRY_OPTIONS
+          faraday.adapter :net_http_persistent
+        end
+
+        options = {
+          host:,
+          format:,
+          public: public_routes,
+          version:,
+        }
+
+        new(connection, options)
       end
 
-      options = {
-        host:,
-        format:,
-        public: public_routes,
-        version:,
-      }
+      def basic_auth?
+        ENV['BASIC_AUTH'] == 'true'
+      end
 
-      new(connection, options)
+      def basic_username
+        ENV['BASIC_USERNAME']
+      end
+
+      def basic_password
+        ENV['BASIC_PASSWORD']
+      end
     end
 
     private

@@ -1,12 +1,12 @@
 version: 2.1
 
 orbs:
-  ruby: circleci/ruby@1.1.2
+  ruby: circleci/ruby@1
 
 jobs:
   checking:
     docker:
-      - image: 'cimg/ruby:3.1.1'
+      - image: cimg/ruby:3.1.2
     steps:
       - checkout
       - ruby/install-deps
@@ -15,12 +15,7 @@ jobs:
           label: Inspecting with Rubocop
   test:
     docker:
-      - image: cimg/ruby:3.1.1
-        environment:
-          BUNDLE_JOBS: "3"
-          BUNDLE_RETRY: "3"
-          RAILS_ENV: test
-          COVERAGE: 1
+      - image: cimg/ruby:3.1.2
     steps:
       - checkout
       - ruby/install-deps
@@ -31,6 +26,4 @@ workflows:
   build_and_test:
     jobs:
       - checking
-      - test:
-          requires:
-            - checking
+      - test
