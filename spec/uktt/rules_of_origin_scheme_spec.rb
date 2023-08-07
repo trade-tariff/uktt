@@ -5,7 +5,7 @@ RSpec.describe Uktt::RulesOfOriginScheme, :http do
 
   describe '#retrieve_all' do
     it 'performs a retrieve of countries' do
-      allow(http).to receive(:retrieve).with('rules_of_origin_schemes.json', heading_code: '050100', country_code: 'RO')
+      allow(http).to receive(:retrieve).with('rules_of_origin_schemes.json', { heading_code: '050100', country_code: 'RO' })
 
       rules_of_origin_scheme.retrieve_all(heading_code: '050100', country_code: 'RO')
     end
