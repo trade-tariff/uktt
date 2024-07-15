@@ -1,11 +1,12 @@
 inherit_gem:
   rubocop-govuk:
     - config/default.yml
+    - config/rails.yml
 
 require: rubocop-rspec
 
 AllCops:
-  TargetRubyVersion: 3.2.2
+  TargetRubyVersion: 3.3.4
   Exclude:
     - 'db/schema.rb'
     - 'vendor/**/*'
@@ -24,11 +25,13 @@ Metrics/BlockLength:
   Enabled: false
 Metrics/ModuleLength:
   Enabled: false
+Rails/FilePath:
+  Enabled: false
+Rails/Blank:
+  Enabled: false
 RSpec/ExampleLength:
   Enabled: false
 RSpec/NestedGroups:
-  Enabled: false
-RSpec/FilePath:
   Enabled: false
 RSpec/VerifiedDoubles:
   Enabled: false
