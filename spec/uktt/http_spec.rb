@@ -8,7 +8,6 @@ RSpec.describe Uktt::Http do
   let(:version) { 'v2' }
   let(:format) { 'ostruct' }
   let(:retriable_intervals) { [] }
-  let(:public_routes) { false }
 
   let(:response) { instance_double(Faraday::Response, body:) }
   let(:body) { '{}' }
@@ -20,7 +19,6 @@ RSpec.describe Uktt::Http do
       format:,
       retriable_intervals:,
       version:,
-      public: public_routes,
     }
   end
 
@@ -45,7 +43,7 @@ RSpec.describe Uktt::Http do
       client.retrieve('commodities/1234567890')
 
       expect(connection).to have_received(:get).with(
-        'commodities/1234567890',
+          'http://example.com/xi/api/v2/commodities/1234567890',
         {},
         { 'Accept' => 'application/vnd.uktt.v2', 'Content-Type' => 'application/json' },
       )
@@ -57,30 +55,12 @@ RSpec.describe Uktt::Http do
       expect(Uktt::Parser).to have_received(:new).with('{}', 'ostruct')
     end
 
-    context 'when public routes are specified' do
-      let(:public_routes) { true }
-
-      it 'makes a get request with the correct resource, query and headers' do
-        client.retrieve('commodities/1234567890')
+    context 'when a query is passed' do
+      it 'uses the correct full url with the query constructed' do
+        client.retrieve('commodities/1234567890', 'filter[geographical_area_id]' => 'RO', 'as_of' => '2022-09-11')
 
         expect(connection).to have_received(:get).with(
           'http://example.com/xi/api/v2/commodities/1234567890',
-          {},
-          { 'Accept' => 'application/vnd.uktt.v2', 'Content-Type' => 'application/json' },
-        )
-      end
-    end
-
-    context 'when a query is passed' do
-      let(:query) { { 'filter[geographical_area_id]' => 'RO', 'as_of' => '2022-09-11' } }
-      let(:host) { 'http://localhost' }
-      let(:expected_path) { '/commodities/1234567890?filter[geographical_area_id]=RO&as_of=2022-09-11' }
-
-      it 'uses the correct full url with the query constructed' do
-        client.retrieve('commodities/1234567890', query)
-
-        expect(connection).to have_received(:get).with(
-          'commodities/1234567890',
           { 'as_of' => '2022-09-11', 'filter[geographical_area_id]' => 'RO' },
           { 'Accept' => 'application/vnd.uktt.v2', 'Content-Type' => 'application/json' },
         )

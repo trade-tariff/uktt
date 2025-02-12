@@ -9,9 +9,5 @@ module Uktt
     def changes(chapter_id)
       fetch "#{RESOURCE_PATH}/#{chapter_id}/changes.json"
     end
-
-    def note(chapter_id)
-      fetch "#{RESOURCE_PATH}/#{chapter_id}/chapter_note.json"
-    end
   end
 end
