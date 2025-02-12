@@ -6,7 +6,7 @@ orbs:
 jobs:
   checking:
     docker:
-      - image: cimg/ruby:3.3.4
+      - image: cimg/ruby:3.3.7
     steps:
       - checkout
       - ruby/install-deps
@@ -15,7 +15,7 @@ jobs:
           label: Inspecting with Rubocop
   test:
     docker:
-      - image: cimg/ruby:3.3.4
+      - image: cimg/ruby:3.3.7
     steps:
       - checkout
       - ruby/install-deps
