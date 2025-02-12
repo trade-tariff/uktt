@@ -43,7 +43,7 @@ RSpec.describe Uktt::Http do
       client.retrieve('commodities/1234567890')
 
       expect(connection).to have_received(:get).with(
-          'http://example.com/xi/api/v2/commodities/1234567890',
+        'http://example.com/xi/api/v2/commodities/1234567890',
         {},
         { 'Accept' => 'application/vnd.uktt.v2', 'Content-Type' => 'application/json' },
       )
