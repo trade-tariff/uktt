@@ -20,14 +20,14 @@ module Uktt
     end
 
     def retrieve(resource, query_config = {})
-      resource = File.join(host, 'api', version, resource) if public?
+      resource = File.join(host, 'api', version, resource)
       response = do_fetch(resource, query_config)
 
       Parser.new(response.body, format).parse
     end
 
     class << self
-      def build(host, version, format, public_routes, retry_options = nil)
+      def build(host, version, format, retry_options = nil)
         connection = Faraday.new(url: host) do |faraday|
           faraday.use FaradayMiddleware::FollowRedirects
           faraday.use Faraday::Response::RaiseError
@@ -37,12 +37,7 @@ module Uktt
           faraday.adapter :net_http_persistent
         end
 
-        options = {
-          host:,
-          format:,
-          public: public_routes,
-          version:,
-        }
+        options = { host:, format:, version: }
 
         new(connection, options)
       end
@@ -87,10 +82,6 @@ module Uktt
 
     def version
       @options.fetch(:version, DEFAULT_VERSION)
-    end
-
-    def public?
-      @options.fetch(:public, DEFAULT_PUBLIC_MODE)
     end
   end
 end

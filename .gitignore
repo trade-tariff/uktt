@@ -16,3 +16,6 @@ vendor/
 .nvimlog
 
 .env
+
+.envrc
+.direnv
