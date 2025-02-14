@@ -24,26 +24,6 @@ RSpec.describe Uktt::Section, :http do
     end
   end
 
-  describe '#note' do
-    context 'when the format is OpenStruct' do
-      let(:format) { 'ostruct' }
-
-      it "retrieves one section's note as OpenStruct" do
-        expect(section.note(section_id).section_id.to_s).to eq(section_id)
-      end
-    end
-
-    context 'when the format is json' do
-      let(:format) { 'json' }
-
-      it "retrieves one section's note" do
-        response = JSON.parse(section.note(section_id), symbolize_names: true)
-
-        expect(response[:section_id].to_s).to eq(section_id)
-      end
-    end
-  end
-
   describe '#retrieve_all' do
     context 'when the format is OpenStruct' do
       let(:format) { 'ostruct' }

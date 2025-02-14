@@ -27,30 +27,6 @@ RSpec.describe Uktt::Chapter, :http do
     end
   end
 
-  describe '#note' do
-    context 'when the format is OpenStruct' do
-      let(:format) { 'ostruct' }
-
-      it "retrieves one chapter's note" do
-        response = chapter.note(chapter_id)
-
-        expect(response.section_id.to_s).to eq('')
-        expect(response.chapter_id).to eq(chapter_id)
-      end
-    end
-
-    context 'when the format is json' do
-      let(:format) { 'json' }
-
-      it "retrieves one chapter's note" do
-        response = JSON.parse(chapter.note(chapter_id), symbolize_names: true)
-
-        expect(response[:section_id].to_s).to eq('')
-        expect(response[:chapter_id]).to eq(chapter_id)
-      end
-    end
-  end
-
   describe '#changes' do
     context 'when the format is OpenStruct' do
       let(:format) { 'ostruct' }
