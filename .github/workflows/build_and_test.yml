@@ -1,0 +1,33 @@
+name: "Build and Test"
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+env:
+  BASIC_AUTH: xxxxue
+  BASIC_PASSWORD: xxxxtoms
+  BASIC_USERNAME: xxxxiff
+jobs:
+  rubocop:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4.1.0
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.4.2
+        bundler-cache: true
+    - name: Inspecting with Rubocop
+      run: bundle exec rubocop --format progress
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4.1.0
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 3.4.2
+        bundler-cache: true
+    - run: bundle exec rspec spec --profile 10 --format RspecJunitFormatter --out /tmp/test-results/rspec/results.xml --format progress
