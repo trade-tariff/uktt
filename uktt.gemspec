@@ -25,11 +25,13 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'net-http-persistent'
 
   spec.add_development_dependency 'bundler'
+  spec.add_development_dependency 'debug'
   spec.add_development_dependency 'dotenv'
   spec.add_development_dependency 'json-schema'
   spec.add_development_dependency 'pry-byebug'
   spec.add_development_dependency 'rake'
   spec.add_development_dependency 'rspec'
-  spec.add_development_dependency 'rspec_junit_formatter'
   spec.add_development_dependency 'rubocop-govuk'
+  spec.add_development_dependency 'ruby-lsp'
+  spec.add_development_dependency 'ruby-lsp-rspec'
 end

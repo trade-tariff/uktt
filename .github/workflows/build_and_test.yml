@@ -1,15 +1,12 @@
-name: "Build and Test"
+name: "Lint and Test"
 on:
   push:
     branches: [main]
   pull_request:
     branches: [main]
-env:
-  BASIC_AUTH: xxxxue
-  BASIC_PASSWORD: xxxxtoms
-  BASIC_USERNAME: xxxxiff
+
 jobs:
-  rubocop:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,8 +15,7 @@ jobs:
       with:
         ruby-version: 3.4.2
         bundler-cache: true
-    - name: Inspecting with Rubocop
-      run: bundle exec rubocop --format progress
+    - run: bundle exec rubocop
 
   test:
     runs-on: ubuntu-latest
@@ -30,4 +26,4 @@ jobs:
       with:
         ruby-version: 3.4.2
         bundler-cache: true
-    - run: bundle exec rspec spec --profile 10 --format RspecJunitFormatter --out /tmp/test-results/rspec/results.xml --format progress
+    - run: bundle exec rspec

@@ -26,12 +26,20 @@
 
           bundle exec rubocop --autocorrect-all --force-exclusion $changed_files Gemfile
         '';
+        psychBuildFlags = with pkgs; [
+          "--with-libyaml-include=${libyaml.dev}/include"
+          "--with-libyaml-lib=${libyaml.out}/lib"
+        ];
       in
       {
         devShells.default = pkgs.mkShell {
           shellHook = ''
             export GEM_HOME=$PWD/.nix/ruby/$(${ruby}/bin/ruby -e "puts RUBY_VERSION")
             mkdir -p $GEM_HOME
+
+            export BUNDLE_BUILD__PSYCH="${
+              builtins.concatStringsSep " " psychBuildFlags
+            }"
 
             export GEM_PATH=$GEM_HOME
             export PATH=$GEM_HOME/bin:$PATH
