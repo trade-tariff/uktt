@@ -1,7 +1,5 @@
 # UKTT
 
-[![CircleCI](https://circleci.com/gh/trade-tariff/uktt.svg?style=shield&circle-token=f1a191a029869bd8bb94a9fd721b663f4653ca49)](https://app.circleci.com/pipelines/github/trade-tariff/uktt)
-
 Uktt provides a way to work with the UK Trade Tariff API, https://api.trade-tariff.service.gov.uk/#gov-uk-trade-tariff-api.
 
 ###  Features
