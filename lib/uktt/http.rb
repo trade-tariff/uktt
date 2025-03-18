@@ -1,5 +1,7 @@
 require 'faraday'
-require 'faraday_middleware'
+require 'faraday/follow_redirects'
+require 'faraday/net_http_persistent'
+require 'faraday/retry'
 
 module Uktt
   class Http
@@ -29,8 +31,8 @@ module Uktt
     class << self
       def build(host, version, format, retry_options = nil)
         connection = Faraday.new(url: host) do |faraday|
-          faraday.use FaradayMiddleware::FollowRedirects
           faraday.use Faraday::Response::RaiseError
+          faraday.use Faraday::FollowRedirects::Middleware
           faraday.response :logger if ENV['DEBUG_REQUESTS']
           faraday.request :basic_auth, basic_username, basic_password if basic_auth?
           faraday.request :retry, retry_options || DEFAULT_RETRY_OPTIONS
