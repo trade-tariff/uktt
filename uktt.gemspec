@@ -20,7 +20,9 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = ">= #{File.read('.ruby-version').chomp}"
 
   spec.add_dependency 'faraday'
+  spec.add_dependency 'faraday-follow_redirects'
   spec.add_dependency 'faraday-net_http_persistent'
+  spec.add_dependency 'faraday-retry'
   spec.add_dependency 'net-http-persistent'
 
   spec.add_development_dependency 'bundler'

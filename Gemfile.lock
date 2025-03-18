@@ -3,7 +3,9 @@ PATH
   specs:
     uktt (2.6.0)
       faraday
+      faraday-follow_redirects
       faraday-net_http_persistent
+      faraday-retry
       net-http-persistent
 
 GEM
