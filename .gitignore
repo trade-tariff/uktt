@@ -19,3 +19,6 @@ vendor/
 
 .envrc
 .direnv
+
+# Ignore lock file as we're a gem
+Gemfile.lock
