@@ -13,7 +13,7 @@ class Base
     fetch "#{self.class::RESOURCE_PATH}.json", query_config
   end
 
-  protected
+protected
 
   attr_reader :http
 

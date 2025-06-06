@@ -1,20 +1,18 @@
-require 'faraday'
-require 'faraday/follow_redirects'
-require 'faraday/net_http_persistent'
-require 'faraday/retry'
+require "faraday"
+require "faraday/follow_redirects"
+require "faraday/net_http_persistent"
+require "faraday/retry"
 
 module Uktt
   class Http
-    DEFAULT_BACKEND_SERVICE = 'uk'.freeze
-    DEFAULT_PARSED_FORMAT = 'jsonapi'.freeze
+    DEFAULT_BACKEND_SERVICE = "uk".freeze
     DEFAULT_RETRY_OPTIONS = {
       max: 2,
       interval: 2.0,
       interval_randomness: 0.5,
       backoff_factor: 2,
     }.freeze
-    DEFAULT_VERSION = 'v2'.freeze
-    DEFAULT_PUBLIC_MODE = false
+    DEFAULT_VERSION = "v2".freeze
 
     def initialize(connection, options)
       @connection = connection
@@ -22,52 +20,49 @@ module Uktt
     end
 
     def retrieve(resource, query_config = {})
-      resource = File.join(host, 'api', version, resource)
+      resource = File.join(host, "api", version, resource)
       response = do_fetch(resource, query_config)
 
-      Parser.new(response.body, format).parse
+      JsonApiParser.new(response.body).parse
     end
 
     class << self
-      def build(host, version, format, retry_options = nil)
+      def build(host, version, retry_options = nil)
         connection = Faraday.new(url: host) do |faraday|
           faraday.use Faraday::Response::RaiseError
           faraday.use Faraday::FollowRedirects::Middleware
-          faraday.response :logger if ENV['DEBUG_REQUESTS']
+          faraday.response :logger if ENV["DEBUG_REQUESTS"]
           faraday.request :basic_auth, basic_username, basic_password if basic_auth?
           faraday.request :retry, retry_options || DEFAULT_RETRY_OPTIONS
           faraday.adapter :net_http_persistent
         end
 
-        options = { host:, format:, version: }
+        options = { host:, version: }
 
         new(connection, options)
       end
 
       def basic_auth?
-        ENV['BASIC_AUTH'] == 'true'
+        ENV["BASIC_AUTH"] == "true"
       end
 
       def basic_username
-        ENV['BASIC_USERNAME']
+        ENV["BASIC_USERNAME"]
       end
 
       def basic_password
-        ENV['BASIC_PASSWORD']
+        ENV["BASIC_PASSWORD"]
       end
     end
 
-    private
+  private
 
     def do_fetch(resource, query_config)
       @connection.get(resource, query_config, headers)
     end
 
     def headers
-      {
-        'Accept' => "application/vnd.uktt.#{version}",
-        'Content-Type' => 'application/json',
-      }
+      { "Content-Type" => "application/json" }
     end
 
     def host
@@ -76,10 +71,6 @@ module Uktt
 
     def service
       @options.fetch(:service, DEFAULT_BACKEND_SERVICE)
-    end
-
-    def format
-      @options.fetch(:format, DEFAULT_PARSED_FORMAT)
     end
 
     def version

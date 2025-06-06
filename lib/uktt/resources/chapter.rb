@@ -1,6 +1,6 @@
 module Uktt
   class Chapter < Base
-    RESOURCE_PATH = 'chapters'.freeze
+    RESOURCE_PATH = "chapters".freeze
 
     def goods_nomenclatures(chapter_id)
       fetch "goods_nomenclatures/chapter/#{chapter_id}.json"
