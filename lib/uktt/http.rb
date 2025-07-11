@@ -5,7 +5,7 @@ require "faraday/retry"
 
 module Uktt
   class Http
-    ACCEPT = 'application/vnd.hmrc.2.0+json'.freeze
+    ACCEPT = "application/vnd.hmrc.2.0+json".freeze
     DEFAULT_RETRY_OPTIONS = {
       max: 2,
       interval: 2.0,
