@@ -5,14 +5,13 @@ require "faraday/retry"
 
 module Uktt
   class Http
-    DEFAULT_BACKEND_SERVICE = "uk".freeze
+    ACCEPT = "application/vnd.hmrc.2.0+json".freeze
     DEFAULT_RETRY_OPTIONS = {
       max: 2,
       interval: 2.0,
       interval_randomness: 0.5,
       backoff_factor: 2,
     }.freeze
-    DEFAULT_VERSION = "v2".freeze
 
     def initialize(connection, options)
       @connection = connection
@@ -20,14 +19,14 @@ module Uktt
     end
 
     def retrieve(resource, query_config = {})
-      resource = File.join(host, "api", version, resource)
+      resource = File.join(host, resource)
       response = do_fetch(resource, query_config)
 
       JsonApiParser.new(response.body).parse
     end
 
     class << self
-      def build(host, version, retry_options = nil)
+      def build(host, retry_options = nil)
         connection = Faraday.new(url: host) do |faraday|
           faraday.use Faraday::Response::RaiseError
           faraday.use Faraday::FollowRedirects::Middleware
@@ -35,9 +34,10 @@ module Uktt
           faraday.request :basic_auth, basic_username, basic_password if basic_auth?
           faraday.request :retry, retry_options || DEFAULT_RETRY_OPTIONS
           faraday.adapter :net_http_persistent
+          faraday.headers["Accept"] = ACCEPT
         end
 
-        options = { host:, version: }
+        options = { host: }
 
         new(connection, options)
       end
@@ -67,14 +67,6 @@ module Uktt
 
     def host
       @options[:host]
-    end
-
-    def service
-      @options.fetch(:service, DEFAULT_BACKEND_SERVICE)
-    end
-
-    def version
-      @options.fetch(:version, DEFAULT_VERSION)
     end
   end
 end
