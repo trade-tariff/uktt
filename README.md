@@ -21,17 +21,16 @@ Set options in the http client and pass the client to different resources
 
 ```ruby
 # Instantiate a new http client with options:
-host =  'http://localhost:3002', # use a local frontend server
-version =  'v2',                 # `v1` and `v2` are supported
-debug =  false,                  # dislays request and response info
-connection = nil                 # Pass a Faraday connection object to inject middleware or leave default configuration with nil
+host =  'http://localhost:3001/api/uk', # use a local frontend server
 
-client = Uktt::Http.new(host, version, debug, connection)
+client = Uktt::Http.build(host)
+section = Uktt::Section.new(client)
 
 # Fetch a single section or all sections
 section_id = '1'
-section = Uktt::Section.new(client)
 response = section.retrieve(section_id)
+
+# Fetch all sections
 response = section.retrieve_all
 ````
 
