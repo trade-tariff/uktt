@@ -3,9 +3,8 @@ require "json-schema"
 require_relative "../lib/uktt"
 
 RSpec.shared_context "with http resources" do
-  let(:http) { Uktt::Http.build(host, version) }
-  let(:host) { "https://dev.trade-tariff.service.gov.uk" }
-  let(:version) { "v2" }
+  let(:http) { Uktt::Http.build(host) }
+  let(:host) { "https://staging.trade-tariff.service.gov.uk/api/uk" }
 end
 
 RSpec.configure do |config|
