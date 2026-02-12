@@ -4,7 +4,7 @@ require_relative "../lib/uktt"
 
 RSpec.shared_context "with http resources" do
   let(:http) { Uktt::Http.build(host) }
-  let(:host) { "https://staging.trade-tariff.service.gov.uk/api/uk" }
+  let(:host) { "https://staging.trade-tariff.service.gov.uk/uk/api" }
 end
 
 RSpec.configure do |config|
