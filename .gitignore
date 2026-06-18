@@ -19,6 +19,7 @@ vendor/
 
 .envrc
 .direnv
+.pre-commit-config-nix.yaml
 
 # Ignore lock file as we're a gem
 Gemfile.lock
