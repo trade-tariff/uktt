@@ -1,59 +1,61 @@
 # UKTT
 
-UKTT provides a way to work with the UK Trade Tariff API, https://api.trade-tariff.service.gov.uk/.
+UKTT is a Ruby client for the UK Trade Tariff API. It fetches sections, chapters,
+headings, commodities, goods nomenclatures, exchange rates and quota definitions.
+It also includes specs that make real requests to a configured tariff API.
 
-###  Features
+For API consumers, start with the
+[Trade Tariff API documentation](https://docs.trade-tariff.service.gov.uk/).
 
-- Fetches sections, chapters, headings, commodities, goods_nomenclatures, monetary exchange rates, and quota definitions from the Tariff API
-- Tests local, production, and any other Frontend API servers using real (not mocked) API calls
+## Install
 
-## Installation
-
-Add to your Gemfile:
+Add the gem to your application's Gemfile and run `bundle install`:
 
 ```ruby
 gem 'uktt'
 ```
 
-## Usage
+## Use the client
 
-Set options in the http client and pass the client to different resources
+Pass the API root to the HTTP client. The local backend's UK API root includes
+`/uk/api`, not `/api/uk`:
 
 ```ruby
-# Instantiate a new http client with options:
-host =  'http://localhost:3001/api/uk', # use a local frontend server
+require 'uktt'
 
+host = 'http://localhost:3000/uk/api'
 client = Uktt::Http.build(host)
 section = Uktt::Section.new(client)
 
-# Fetch a single section or all sections
-section_id = '1'
-response = section.retrieve(section_id)
-
-# Fetch all sections
+response = section.retrieve('1')
 response = section.retrieve_all
-````
-
-## Development
-
-While developing the gem, and for use outside of a Rails app, I found it useful to have a console:
-
-```bash
-$ bundle console
 ```
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` (or `bundle console` outside of a rails app) for an interactive prompt that will allow you to experiment.
+The backend must be running and contain data for the resources you request.
+See [lib/uktt/](lib/uktt/) for the supported resource clients.
 
-## Contributing
+## Develop and check changes
 
-Code: https://github.com/trade-tariff/uktt.
+Use Ruby and Bundler with the versions required by [uktt.gemspec](uktt.gemspec)
+and [Gemfile](Gemfile). From the repository root:
 
-This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+```sh
+bundle install
+bundle exec rake spec
+```
 
-## License
+Some specs make real HTTP requests. The shared HTTP context in
+[spec/spec_helper.rb](spec/spec_helper.rb) targets the staging tariff service.
+Check the target and access requirements before running the suite. It is not an
+entirely offline test suite. Use `bundle console` for an interactive Ruby session.
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+## Contribute
 
-## Code of Conduct
+Read [CONTRIBUTING.md](CONTRIBUTING.md) for the fork workflow, checks and private
+security reporting. Follow the [code of conduct](CODE_OF_CONDUCT.md).
 
-Everyone interacting in the `uktt` project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/trade-tariff/uktt/blob/master/CODE_OF_CONDUCT.md).
+## Licence
+
+The gem uses the [MIT licence](LICENSE.txt), including Christopher Unger's
+copyright notice. Preserve that notice when reusing the code. API data and
+third-party dependencies retain their own terms.
